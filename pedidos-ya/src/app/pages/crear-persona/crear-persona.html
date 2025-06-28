@@ -1,0 +1,80 @@
+<div class="container" id="CrearPersona-container">
+    <div class="container d-flex justify-content-center align-items-center vh-100">
+        <div class="card p-4">
+            <h2 class="text-center mb-4">Crear Persona</h2>
+            <form>
+                <div class="row gx-5">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="NOMBRE" class="form-label">NOMBRE</label>
+                            <input type="text" class="form-control" id="NOMBRE">
+                        </div>
+                        <div class="mb-3">
+                            <label for="APELLIDO" class="form-label">APELLIDO</label>
+                            <input type="text" class="form-control" id="APELLIDO">
+                        </div>
+                        <div class="mb-3">
+                            <label for=" EMAIL" class="form-label">EMAIL</label>
+                            <input type="email" class="form-control" id=" EMAIL">
+                        </div>
+                        <div class="mb-3">
+                            <label for="CONTRASEÑA" class="form-label">CONTRASEÑA</label>
+                            <input type="password" class="form-control" id="CONTRASEÑA">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="FECHA DE NACIMIENTO" class="form-label">FECHA DE NACIMIENTO</label>
+                            <input type="text" class="form-control" id="FECHA DE NACIMIENTO" placeholder="DD/MM/AAAA">
+                        </div>
+                        <div class="mb-3">
+                            <label for="PAIS" class="form-label">PAIS</label>
+                            <select class="form-select" id="PAIS">
+                                <option value="" selected disabled>Seleccione un país</option>
+                                <option value="Argentina">Argentina</option>
+                                <option value="Uruguay">Uruguay</option>
+                                <option value="Chile">Chile</option>
+                                <option value="Paraguay">Paraguay</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="PROVINCIA" class="form-label">PROVINCIA</label>
+                            <select class="form-select" id="PROVINCIA">
+                                <option value="" selected disabled>Seleccione una provincia</option>
+                                <option value="Cordoba">Cordoba</option>
+                                <option value="Buenos Aires">Buenos Aires</option>
+                                <option value="Santa Fe">Santa Fe</option>
+                                <option value="Mendoza">Mendoza</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="LOCALIDAD" class="form-label">LOCALIDAD</label>
+                            <select class="form-select" id="LOCALIDAD">
+                                <option value="" selected disabled>Seleccione una localidad</option>
+                                <option value="Canals">Canals</option>
+                                <option value="Villa Maria">Villa Maria</option>
+                                <option value="Cordoba">Cordoba</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <div class="mb-3">
+                            <label for="ROL" class="form-label">ROL</label>
+                            <select class="form-select" id="ROL">
+                                <option value="" selected disabled>Seleccione un rol</option>
+                                <option value="Usuario">Usuario</option>
+                                <option value="Administrador">Administrador</option>
+                                <option value="Moderador">Gerente</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 text-center">
+                    <button type="submit" class="btn btn-primary w-50">Crear</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
