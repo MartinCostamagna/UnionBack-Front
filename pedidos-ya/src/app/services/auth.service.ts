@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, tap } from 'rxjs';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
     providedIn: 'root' // Esto hace que el servicio esté disponible en toda la aplicación.
@@ -68,5 +69,37 @@ export class AuthService {
         // Si getToken() devuelve un string, !!'string' es true.
         // Si getToken() devuelve null, !!null es false.
         return !!this.getToken();
+    }
+
+    /**
+   * Decodifica el token JWT guardado y devuelve el rol del usuario.
+   * @returns El rol del usuario ('admin', 'moderator', 'user') o null si no hay token.
+   */
+    getUserRole(): string | null {
+        const token = this.getToken(); // Usamos el método que ya tenías
+        if (!token) {
+            return null;
+        }
+
+        try {
+            // 2. Decodificamos el token y extraemos el rol
+            const decodedToken: any = jwtDecode(token);
+            // Asumimos que en el backend, al crear el token, incluiste el 'role' en el payload.
+            return decodedToken.role;
+        } catch (error) {
+            console.error("Error al decodificar el token", error);
+            return null;
+        }
+    }
+
+    getUserInfoFromToken(): { firstName: string, lastName: string, email: string, role: string } | null {
+        const token = this.getToken();
+        if (!token) return null;
+        try {
+            // Asumimos que el payload tiene estos campos. ¡Asegúrate de que tu backend los incluya al crear el token!
+            return jwtDecode(token);
+        } catch (error) {
+            return null;
+        }
     }
 }

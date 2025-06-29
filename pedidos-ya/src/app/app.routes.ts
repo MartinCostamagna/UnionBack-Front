@@ -10,16 +10,16 @@ import { EditarPersona } from './pages/editar-persona/editar-persona';
 export const routes: Routes = [
   {
     path: '',
-    component: TemplateComponent,
     children: [
       {
         path: '',
-        component: HomeComponent,
+        component: LoginComponent,
       },
     ],
   },
   { path: 'login', component: LoginComponent },
   { path: 'registro', component: Registro },
+  { path: 'home', component: HomeComponent },
   { path: 'TablaDeDatos', component: TablaDeDatos },
   { path: 'CrearPersona', component: CrearPersona },
   { path: 'EditarPersona', component: EditarPersona }

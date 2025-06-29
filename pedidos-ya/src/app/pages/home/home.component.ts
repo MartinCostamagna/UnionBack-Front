@@ -1,27 +1,27 @@
 import { Component, OnInit } from '@angular/core';
-import { ApiService } from '../../services/api.service';
-import { GlobalStatusService } from '../../services/global-status.service';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-home',
-  imports: [],
+  imports: [CommonModule, RouterModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
 export class HomeComponent implements OnInit {
-  items: Array<{ image: string; name: string; description: string }> = [];
-  constructor(
-    private readonly apiService: ApiService,
-    private readonly globalStatusService: GlobalStatusService
-  ) { }
-  ngOnInit(): void {
-    this.initialization();
-  }
 
-  async initialization(): Promise<void> {
-    this.globalStatusService.setLoading(true);
-    const data = await this.apiService.getData();
-    this.items = data;
-    this.globalStatusService.setLoading(false);
+  // 1. Creamos una propiedad para controlar la visibilidad
+  canShowAdminButtons = false;
+
+  // 2. Inyectamos el AuthService
+  constructor(private authService: AuthService) { }
+
+  ngOnInit(): void {
+    // 3. Cuando el componente se inicia, verificamos el rol
+    const userRole = this.authService.getUserRole();
+    if (userRole === 'admin' || userRole === 'moderator') {
+      this.canShowAdminButtons = true;
+    }
   }
 }

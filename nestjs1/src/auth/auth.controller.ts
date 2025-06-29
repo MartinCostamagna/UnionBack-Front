@@ -1,11 +1,12 @@
 // src/auth/auth.controller.ts
 import { Controller, Post, Body, Res, HttpCode, HttpStatus, UsePipes, ValidationPipe, Logger, Req, Get, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { Response, Request } from 'express';
+import { Response } from 'express';
 import { LoginDto } from './dto/login.dto';
-import { RegisterPersonDto } from './dto/register-person.dto'; 
+import { RegisterPersonDto } from './dto/register-person.dto';
 import { ConfigService } from '@nestjs/config';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { User } from '../auth/decorators/user.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -14,7 +15,7 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly configService: ConfigService,
-  ) {}
+  ) { }
 
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
@@ -57,9 +58,9 @@ export class AuthController {
   async logout(@Res({ passthrough: true }) response: Response) {
     this.logger.log('Intento de logout.');
     const cookieOptions = {
-        httpOnly: true,
-        secure: this.configService.get<string>('NODE_ENV') === 'production',
-        sameSite: 'lax' as const,
+      httpOnly: true,
+      secure: this.configService.get<string>('NODE_ENV') === 'production',
+      sameSite: 'lax' as const,
     };
     response.clearCookie('jwt', cookieOptions);
     this.logger.log('Logout exitoso. Cookie eliminada.');
@@ -68,9 +69,9 @@ export class AuthController {
 
   @Get('status')
   @UseGuards(JwtAuthGuard)
-  status(@Req() req: Request) {
-    this.logger.log(`Verificando estado de auth para usuario: ${JSON.stringify(req.user)}`);
-    return { isAuthenticated: true, user: req.user };
+  status(@User() user: any) {
+    this.logger.log(`Verificando estado de auth para usuario: ${JSON.stringify(user)}`);
+    return { isAuthenticated: true, user: user };
   }
 
   private parseExpiresIn(expiresInString: string): number {
@@ -87,5 +88,12 @@ export class AuthController {
         const num = parseInt(expiresInString, 10);
         return isNaN(num) ? 3600 * 1000 : num * 1000;
     }
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('profile')
+  getProfile(@User() user: any) {
+    // Ahora la variable 'user' contiene directamente lo que antes era 'req.user'
+    return user;
   }
 }

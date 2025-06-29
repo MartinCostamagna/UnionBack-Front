@@ -48,8 +48,6 @@ export class LoginComponent implements OnInit { // <-- Implementamos OnInit para
     this.authService.login(this.loginForm.value).subscribe({
       next: (response) => {
         console.log('Login exitoso:', response);
-        alert('¡Bienvenido de nuevo!');
-        // Si el login es correcto, redirigimos al usuario a la página principal
         this.router.navigate(['/home']); // Puedes cambiar '/home' por tu ruta deseada
       },
       error: (err) => {
