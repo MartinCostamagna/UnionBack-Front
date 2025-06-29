@@ -1,14 +1,3 @@
-::ng-deep body::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 65px;
-    background-color: #1644A8;
-    z-index: 1000;
-}
-
 h2 {
     font-size: 2.5rem;
 }

@@ -1,8 +1,14 @@
-// En: src/app/components/header/header.ts
-import { Component, OnInit } from '@angular/core';
+// src/app/components/header/header.ts
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { Observable, map } from 'rxjs';
+
+interface UserInfo {
+  name: string;
+  role: string;
+}
 
 @Component({
   selector: 'app-header',
@@ -11,32 +17,26 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './header.html',
   styleUrls: ['./header.css']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent {
 
-  isLoggedIn = false;
-  userName = '';
-  userRole = '';
+  isLoggedIn$: Observable<boolean>;
+  userInfo$: Observable<UserInfo | null>;
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService, private router: Router) {
+    this.isLoggedIn$ = this.authService.isLoggedIn$;
 
-  ngOnInit(): void {
-    // Verificamos el estado del login cuando el componente se inicia
-    this.isLoggedIn = this.authService.isLoggedIn();
-
-    if (this.isLoggedIn) {
-      // Si el usuario está logueado, obtenemos su información
-      const userInfo = this.authService.getUserInfoFromToken();
-      if (userInfo) {
-        // Asumimos que el payload del token tiene nombre y rol
-        this.userName = `${userInfo.firstName} ${userInfo.lastName}`;
-        this.userRole = userInfo.role;
-      }
-    }
+    this.userInfo$ = this.isLoggedIn$.pipe(
+      map(isLoggedIn => {
+        if (isLoggedIn) {
+          const tokenInfo = this.authService.getUserInfoFromToken();
+          return tokenInfo ? { name: `${tokenInfo.firstName} ${tokenInfo.lastName}`, role: tokenInfo.role } : null;
+        }
+        return null;
+      })
+    );
   }
 
   logout(): void {
     this.authService.logout();
-    // Forzamos la recarga de la página para que el header se actualice, o navegamos al login.
-    window.location.reload();
   }
 }

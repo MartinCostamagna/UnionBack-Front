@@ -50,6 +50,7 @@ export class AuthController {
     this.logger.log(`Login exitoso para: ${loginDto.email}. Cookie establecida.`);
     return {
       message: 'Inicio de sesión exitoso.',
+      accessToken: result.access_token
     };
   }
 

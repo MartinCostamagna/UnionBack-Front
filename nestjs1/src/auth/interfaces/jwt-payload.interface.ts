@@ -5,7 +5,6 @@ export interface JwtPayload {
   sub: number;
   email: string;
   role: PersonRole;
-  // Otros campos opcionales
-  // firstName?: string;
-  // lastName?: string;
+  firstName: string;
+  lastName: string;
 }

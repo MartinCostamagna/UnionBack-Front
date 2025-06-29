@@ -15,7 +15,7 @@ export class AuthService {
   constructor(
     private readonly personsService: PersonService,
     private readonly jwtService: JwtService,
-    private readonly citiesService: CitiesService, // Inyectar CitiesService
+    private readonly citiesService: CitiesService,
   ) { }
 
   async login(email: string, pass: string): Promise<{ access_token: string }> {
@@ -37,6 +37,8 @@ export class AuthService {
       sub: person.id,
       email: person.email,
       role: person.role,
+      firstName: person.firstName,
+      lastName: person.lastName
     };
     this.logger.log(`Login exitoso para: ${email}. Generando token.`);
     return {

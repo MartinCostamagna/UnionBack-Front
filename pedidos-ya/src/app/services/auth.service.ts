@@ -3,7 +3,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Observable, tap } from 'rxjs';
+import { Observable, BehaviorSubject, tap } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
@@ -14,11 +14,21 @@ export class AuthService {
     // Es una buena práctica mover esto a los archivos de environment (environment.ts).
     private apiUrl = 'http://localhost:3001';
 
+    private loggedIn = new BehaviorSubject<boolean>(this.hasToken());
+
     constructor(
         private http: HttpClient,
         private router: Router
     ) { }
 
+    get isLoggedIn$(): Observable<boolean> {
+        return this.loggedIn.asObservable();
+    }
+
+    // Creamos un método privado para verificar si hay un token al inicio
+    private hasToken(): boolean {
+        return !!localStorage.getItem('accessToken');
+    }
     /**
      * Envía los datos del nuevo usuario al endpoint de registro del backend.
      * @param userData Objeto con los datos del usuario a registrar.
@@ -39,6 +49,7 @@ export class AuthService {
                 // Si la respuesta tiene un accessToken, lo guardamos.
                 if (response.accessToken) {
                     localStorage.setItem('accessToken', response.accessToken);
+                    this.loggedIn.next(true);
                 }
             })
         );
@@ -49,6 +60,7 @@ export class AuthService {
      */
     logout(): void {
         localStorage.removeItem('accessToken');
+        this.loggedIn.next(false);
         this.router.navigate(['/login']);
     }
 
