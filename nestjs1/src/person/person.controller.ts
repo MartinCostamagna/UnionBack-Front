@@ -21,7 +21,7 @@ import { PaginatedResponseDto } from '../common/dto/paginated-response.dto'; // 
 export class PersonController {
   private readonly logger = new Logger(PersonController.name);
 
-  constructor(private readonly personService: PersonService) {}
+  constructor(private readonly personService: PersonService) { }
 
   @Post()
   @UseGuards(RolesGuard)

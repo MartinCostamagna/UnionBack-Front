@@ -1,11 +1,28 @@
 <div class="tabla-container py-5">
     <h2 class="text-center mb-1">Tabla de Datos</h2>
     <p class="text-center mb-4">Personas</p>
+    @if (isLoading) {
+    <div class="text-center my-5">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Cargando...</span>
+        </div>
+        <p>Cargando datos...</p>
+    </div>
+    }
+    @if (errorMessage && !isLoading) {
+    <div class="alert alert-danger text-center">
+        <strong>Error:</strong> {{ errorMessage }}
+    </div>
+    }
+    @if (!isLoading && !errorMessage) {
     <div class="table-responsive">
         <table class="table table-bordered table-hover text-center align-middle">
             <thead class="table-header-custom">
                 <tr>
-                    <th scope="col" style="width: 5%;"></th>
+                    <th scope="col" style="width: 5%;">
+                        <input class="form-check-input" type="checkbox" [checked]="isAllSelected()"
+                            (change)="toggleSelectAll()" [disabled]="persons.length === 0">
+                    </th>
                     <th scope="col">Nombre</th>
                     <th scope="col">Apellido</th>
                     <th scope="col">Email</th>
@@ -17,54 +34,26 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td><input class="form-check-input" type="checkbox"></td>
-                    <td>Gabriel</td>
-                    <td>Giagnorio</td>
-                    <td><a href="mailto:giagnoriogabriel&#64;gmail.com">giagnoriogabriel&#64;gmail.com</a></td>
-                    <td>Usuario</td>
-                    <td>4/3/2005</td>
-                    <td>Argentina</td>
-                    <td>Córdoba</td>
-                    <td>Villa María</td>
-                </tr>
-                <tr>
-                    <td><input class="form-check-input" type="checkbox"></td>
-                    <td>Martín</td>
-                    <td>Costamagna</td>
-                    <td><a href="mailto:martinandrecosta&#64;gmail.com">martinandrecosta&#64;gmail.com</a></td>
-                    <td>Moderador</td>
-                    <td>6/1/2005</td>
-                    <td>Argentina</td>
-                    <td>Córdoba</td>
-                    <td>Canals</td>
-                </tr>
-                <tr>
+                @for (person of persons; track person.id) {
+                <tr [class.table-active]="selectedIds.has(person.id)">
                     <td>
-                        <input class="form-check-input" type="checkbox">
+                        <input class="form-check-input" type="checkbox" [checked]="selectedIds.has(person.id)"
+                            (change)="toggleSelection(person.id)">
                     </td>
-                    <td>Guido</td>
-                    <td>Mana</td>
-                    <td><a href="mailto:guidomana&#64;gmail.com">guidomana&#64;gmail.com</a></td>
-                    <td>Administrador</td>
-                    <td>3/4/2005</td>
-                    <td>Argentina</td>
-                    <td>Córdoba</td>
-                    <td>Villa Nueva</td>
+                    <td>{{ person.firstName }}</td>
+                    <td>{{ person.lastName }}</td>
+                    <td><a [href]="'mailto:' + person.email">{{ person.email }}</a></td>
+                    <td>{{ person.role | titlecase }}</td>
+                    <td>{{ person.birthDate | date:'dd/MM/yyyy' }}</td>
+                    <td>{{ person.city?.province?.country?.name || 'N/A' }}</td>
+                    <td>{{ person.city?.province?.name || 'N/A' }}</td>
+                    <td>{{ person.city?.name || 'N/A' }}</td>
                 </tr>
+                } @empty {
                 <tr>
-                    <td>
-                        <input class="form-check-input" type="checkbox">
-                    </td>
-                    <td>Cecilia</td>
-                    <td>Testa</td>
-                    <td><a href="mailto:testacecilia&#64;gmail.com">testacecilia&#64;gmail.com</a></td>
-                    <td>Usuario</td>
-                    <td>11/12/2004</td>
-                    <td>Argentina</td>
-                    <td>Córdoba</td>
-                    <td>Los Surgentes</td>
+                    <td colspan="9" class="text-center py-4">No se encontraron personas.</td>
                 </tr>
+                }
             </tbody>
         </table>
     </div>
@@ -73,22 +62,37 @@
             <button type="button" class="btn btn-primary w-75" routerLink="/CrearPersona">Crear</button>
         </div>
         <div class="col-md-4 text-center mb-2">
-            <button type="button" class="btn btn-primary w-75" routerLink="/EditarPersona">Editar</button>
+            <button type="button" class="btn btn-primary w-75" [disabled]="selectedIds.size !== 1"
+                (click)="editSelectedPerson()">Editar</button>
         </div>
         <div class="col-md-4 text-center mb-2">
-            <button type="submit" class="btn btn-primary w-75">Eliminar</button>
+            <button type="button" class="btn btn-danger w-75" [disabled]="selectedIds.size === 0"
+                (click)="deleteSelectedPersons()">Eliminar</button>
         </div>
     </div>
+    @if (meta && meta.totalPages > 1) {
     <div class="d-flex justify-content-center mt-4">
         <nav aria-label="Navegación de la tabla de datos">
             <ul class="pagination">
-                <li class="page-item"><a class="page-link" href="#">&lt;</a></li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item active"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item" [class.disabled]="meta.currentPage === 1">
+                    <a class="page-link" href="javascript:void(0);" (click)="goToPage(meta.currentPage - 1)">&lt;</a>
+                </li>
+                @for(page of paginationNumbers; track $index) {
+                @if (page === '...') {
                 <li class="page-item disabled"><span class="page-link">...</span></li>
-                <li class="page-item"><a class="page-link" href="#">SIGUIENTE &gt;</a></li>
+                } @else {
+                <li class="page-item" [class.active]="page === meta.currentPage">
+                    <a class="page-link" href="javascript:void(0);" (click)="goToPage(+page)">{{ page }}</a>
+                </li>
+                }
+                }
+                <li class="page-item" [class.disabled]="meta.currentPage === meta.totalPages">
+                    <a class="page-link" href="javascript:void(0);" (click)="goToPage(meta.currentPage + 1)">SIGUIENTE
+                        &gt;</a>
+                </li>
             </ul>
         </nav>
     </div>
+    }
+    }
 </div>

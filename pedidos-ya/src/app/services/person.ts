@@ -1,8 +1,10 @@
-// src/app/services/persons.service.ts
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { Person } from '../models/person.model';
+import { PaginatedResponse } from '../models/pagination.model';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,45 +14,44 @@ export class PersonsService {
   private readonly apiUrl = 'http://localhost:3001';
   private readonly endpoint = '/persons';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private authService: AuthService) { }
 
-  getPersons(): Observable<Person[]> {
-    return this.http.get<Person[]>(`${this.apiUrl}${this.endpoint}`);
+  private getAuthHeaders(): HttpHeaders | null {
+    // Le pedimos el token directamente al AuthService
+    const token = this.authService.getToken();
+
+    if (!token) {
+      return null;
+    }
+    return new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
   }
 
-  /**
-   * Obtiene una única persona por su ID.
-   * @param id El ID de la persona a buscar.
-   */
-  getPersonById(id: number): Observable<Person> {
-    return this.http.get<Person>(`${this.apiUrl}${this.endpoint}/${id}`);
+  getPersons(page: number, limit: number): Observable<PaginatedResponse<Person>> {
+    const headers = this.getAuthHeaders();
+    if (!headers) {
+      return throwError(() => new Error('No se encontró el token de autenticación.'));
+    }
+
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('limit', limit.toString());
+
+    return this.http.get<PaginatedResponse<Person>>(`${this.apiUrl}${this.endpoint}`, { headers, params })
+      .pipe(
+        catchError(err => {
+          console.error('Ocurrió un error en getPersons:', err);
+          return throwError(() => new Error('Error al obtener los datos de las personas.'));
+        })
+      );
   }
 
-  /**
-   * Crea una nueva persona.
-   * Nota: Usamos Omit para crear un tipo que es igual a Person pero sin 'id' y 'city',
-   * ya que esos no se envían directamente al crear.
-   * @param personData Los datos de la persona a crear.
-   */
-  createPerson(personData: Omit<Person, 'id' | 'city'>): Observable<Person> {
-    return this.http.post<Person>(`${this.apiUrl}${this.endpoint}`, personData);
-  }
-
-  /**
-   * Actualiza una persona existente.
-   * Nota: Usamos Partial<> porque podrías querer actualizar solo algunos campos.
-   * @param id El ID de la persona a actualizar.
-   * @param personData Los campos de la persona a actualizar.
-   */
-  updatePerson(id: number, personData: Partial<Omit<Person, 'id' | 'city'>>): Observable<Person> {
-    return this.http.put<Person>(`${this.apiUrl}${this.endpoint}/${id}`, personData);
-  }
-
-  /**
-   * Elimina una persona de la base de datos.
-   * @param id El ID de la persona a eliminar.
-   */
   deletePerson(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}${this.endpoint}/${id}`);
+    const headers = this.getAuthHeaders();
+    if (!headers) {
+      return throwError(() => new Error('No se encontró el token de autenticación.'));
+    }
+    return this.http.delete<void>(`${this.apiUrl}${this.endpoint}/${id}`, { headers });
   }
 }
