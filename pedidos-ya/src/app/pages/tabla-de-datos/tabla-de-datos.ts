@@ -64,7 +64,7 @@ export class TablaDeDatos implements OnInit {
     }
   }
 
-  loadPersons(page: number, limit: number = 5): void {
+  loadPersons(page: number, limit: number = 10): void {
     this.isLoading = true;
     this.errorMessage = null;
     this.selectedIds.clear();

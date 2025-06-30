@@ -48,12 +48,7 @@ export class ProvincesService {
     });
 
     // Devolvemos la LISTA DE PROVINCIAS en el formato paginado que espera el frontend
-    return {
-      data: provinces,
-      total,
-      page: 1,
-      limit: total,
-    };
+    return new PaginatedResponseDto(provinces, total, 1, total);
   }
 
   private mapToResponseDto(province: Province): ProvinceResponseDto {

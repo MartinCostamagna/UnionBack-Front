@@ -49,12 +49,7 @@ export class CitiesService {
       order: { name: 'ASC' }
     });
 
-    return {
-      data: cities,
-      total,
-      page: 1,
-      limit: total,
-    };
+    return new PaginatedResponseDto(cities, total, 1, total);
   }
 
   private mapToResponseDto(city: City): CityResponseDto {

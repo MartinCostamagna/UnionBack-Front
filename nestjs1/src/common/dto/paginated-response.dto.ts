@@ -1,23 +1,26 @@
 // src/common/dto/paginated-response.dto.ts
-import { Expose } from 'class-transformer';
+// Define la estructura del objeto 'meta' para la paginación como una interfaz
+export interface PaginationMetaDto {
+  totalItems: number;
+  itemCount: number;
+  itemsPerPage: number;
+  totalPages: number;
+  currentPage: number;
+}
 
+// Define la estructura de la respuesta paginada completa
 export class PaginatedResponseDto<T> {
-  @Expose()
   data: T[];
-
-  @Expose()
-  total: number;
-
-  @Expose()
-  page: number;
-
-  @Expose()
-  limit: number;
+  meta: PaginationMetaDto;
 
   constructor(data: T[], total: number, page: number, limit: number) {
     this.data = data;
-    this.total = total;
-    this.page = page;
-    this.limit = limit;
+    this.meta = {
+      totalItems: total,
+      itemCount: data.length,
+      itemsPerPage: limit,
+      totalPages: Math.ceil(total / limit),
+      currentPage: page,
+    };
   }
 }
