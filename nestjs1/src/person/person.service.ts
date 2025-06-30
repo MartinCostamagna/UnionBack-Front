@@ -11,6 +11,23 @@ import { PaginationDto } from '../common/dto/pagination.dto';
 import { PaginatedResponseDto } from '../common/dto/paginated-response.dto';
 import { PersonResponseDto, CityResponse, ProvinceResponse, CountryResponse } from './interfaces/person.interfaces';
 
+/**
+ * Función de ayuda para corregir la zona horaria de una fecha.
+ * @param dateString - El string de fecha en formato 'YYYY-MM-DD'.
+ * @returns Un objeto Date ajustado para evitar el desfase de zona horaria.
+ */
+function adjustDateForTimezone(dateString: string | Date): Date | null {
+  if (!dateString) return null;
+  // Si ya es un objeto Date, no hacemos nada. Si es string, lo ajustamos.
+  if (typeof dateString !== 'string') return dateString;
+  // Creamos la fecha, que JS interpretará como UTC a medianoche.
+  const date = new Date(dateString);
+  // Obtenemos el desfase de la zona horaria del servidor en minutos (ej: para GMT-3 es 180).
+  const timezoneOffset = date.getTimezoneOffset();
+  // Añadimos ese desfase a la fecha para contrarrestar la conversión UTC y mantener el día correcto.
+  return new Date(date.getTime() + (timezoneOffset * 60000));
+}
+
 @Injectable()
 export class PersonService {
   private readonly logger = new Logger(PersonService.name);
@@ -92,7 +109,7 @@ export class PersonService {
       role: role || PersonRole.USER,
       city: cityEntity,
       cityId: cityEntity ? cityEntity.id : null,
-      birthDate: birthDate ? new Date(birthDate) : null,
+      birthDate: birthDate ? adjustDateForTimezone(birthDate) : null,
     });
 
     const savedPerson = await this.personRepository.save(newPersonEntity);

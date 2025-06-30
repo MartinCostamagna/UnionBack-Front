@@ -1,10 +1,11 @@
-// src/app/components/tabla-de-datos/tabla-de-datos.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { PersonsService } from '../../services/person';
 import { Person } from '../../models/person.model';
-import { PaginationMeta } from '../../models/pagination.model';
+import { PaginationMeta, PaginatedResponse } from '../../models/pagination.model';
+import { forkJoin, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-tabla-de-datos',
@@ -23,28 +24,47 @@ export class TablaDeDatos implements OnInit {
 
   constructor(
     private personsService: PersonsService,
-    private router: Router // Inyectamos el Router para la navegación
+    private router: Router
   ) { }
 
   ngOnInit(): void {
     this.loadPersons(1);
   }
 
-  // --- LÓGICA DE NAVEGACIÓN PARA EDITAR ---
-  editSelectedPerson(): void {
-    // Si no hay exactamente un usuario seleccionado, no hacemos nada.
-    if (this.selectedIds.size !== 1) {
-      alert('Por favor, seleccione una única persona para editar.');
+  deleteSelectedPersons(): void {
+    if (this.selectedIds.size === 0) {
+      alert('Por favor, seleccione al menos una persona para eliminar.');
       return;
     }
-    // Obtenemos el primer (y único) ID del Set
-    const selectedId = this.selectedIds.values().next().value;
-    // Navegamos a la ruta de edición, pasando el ID como parámetro
-    this.router.navigate(['/EditarPersona', selectedId]);
+
+    // Pedimos confirmación al usuario
+    if (confirm(`¿Está seguro de que desea eliminar ${this.selectedIds.size} persona(s)?`)) {
+      const idsToDelete = Array.from(this.selectedIds);
+
+      // Creamos un array de observables, uno por cada petición DELETE
+      const deleteObservables = idsToDelete.map(id =>
+        this.personsService.deletePerson(id).pipe(
+          catchError(error => {
+            // Si una petición falla, informamos y devolvemos un observable que no rompa el forkJoin
+            console.error(`Error al eliminar persona con ID ${id}`, error);
+            alert(`No se pudo eliminar la persona con ID ${id}.`);
+            return of(null); // 'of(null)' permite que las otras eliminaciones continúen
+          })
+        )
+      );
+
+      // Usamos forkJoin para ejecutar todas las peticiones en paralelo
+      forkJoin(deleteObservables).subscribe({
+        next: () => {
+          alert('Operación de eliminación completada.');
+          // Recargamos la tabla para ver los cambios
+          this.loadPersons(this.meta?.currentPage || 1);
+        }
+      });
+    }
   }
 
-  // --- MÉTODOS EXISTENTES (sin cambios) ---
-  loadPersons(page: number, limit: number = 5): void { // Cambiado a 5 para pruebas
+  loadPersons(page: number, limit: number = 5): void {
     this.isLoading = true;
     this.errorMessage = null;
     this.selectedIds.clear();
@@ -61,6 +81,15 @@ export class TablaDeDatos implements OnInit {
         this.isLoading = false;
       }
     });
+  }
+
+  editSelectedPerson(): void {
+    if (this.selectedIds.size !== 1) {
+      alert('Por favor, seleccione una única persona para editar.');
+      return;
+    }
+    const selectedId = this.selectedIds.values().next().value;
+    this.router.navigate(['/EditarPersona', selectedId]);
   }
 
   toggleSelection(id: number): void {
@@ -80,32 +109,6 @@ export class TablaDeDatos implements OnInit {
       this.selectedIds.clear();
     } else {
       this.persons.forEach(p => this.selectedIds.add(p.id));
-    }
-  }
-
-  deleteSelectedPersons(): void {
-    if (this.selectedIds.size === 0) {
-      alert('Por favor, seleccione al menos una persona para eliminar.');
-      return;
-    }
-
-    if (confirm(`¿Está seguro de que desea eliminar ${this.selectedIds.size} persona(s)?`)) {
-      const idsToDelete = Array.from(this.selectedIds);
-      idsToDelete.forEach((id, index) => {
-        this.personsService.deletePerson(id).subscribe({
-          next: () => {
-            console.log(`Persona con ID ${id} eliminada.`);
-            if (index === idsToDelete.length - 1) {
-              alert('Eliminación completada.');
-              this.loadPersons(this.meta?.currentPage || 1);
-            }
-          },
-          error: (err) => {
-            console.error(`Error al eliminar persona con ID ${id}`, err);
-            alert(`No se pudo eliminar la persona con ID ${id}.`);
-          }
-        });
-      });
     }
   }
 
