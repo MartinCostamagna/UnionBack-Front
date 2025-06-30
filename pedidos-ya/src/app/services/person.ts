@@ -53,6 +53,14 @@ export class PersonsService {
     return this.http.get<Person>(`${this.apiUrl}${this.endpoint}/${id}`, { headers });
   }
 
+  createPerson(personData: Omit<Person, 'id' | 'city'>): Observable<Person> {
+    const headers = this.getAuthHeaders();
+    if (!headers) {
+      return throwError(() => new Error('No se encontró el token de autenticación.'));
+    }
+    return this.http.post<Person>(`${this.apiUrl}${this.endpoint}`, personData, { headers });
+  }
+
   updatePerson(id: number, personData: Partial<Person>): Observable<Person> {
     const headers = this.getAuthHeaders();
     if (!headers) {

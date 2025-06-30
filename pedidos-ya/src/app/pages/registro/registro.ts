@@ -1,22 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-// --> Se recomienda importar 'Router' si quieres redirigir al usuario después del registro
 import { Router } from '@angular/router';
-
-// Importamos todos los modelos y servicios que usaremos
 import { Country } from '../../models/country.model';
 import { Province } from '../../models/province.model';
 import { City } from '../../models/city.model';
 import { PersonRole } from '../../models/person-role.enum';
-
 import { CountriesService } from '../../services/countries';
 import { ProvincesService } from '../../services/provinces';
 import { CitiesService } from '../../services/cities';
-// --> Asumo que el servicio de registro está en 'AuthService' según nuestra conversación
 import { AuthService } from '../../services/auth.service';
-
-// --> Importamos 'tap' y 'catchError' para un mejor manejo de observables
 import { catchError, tap, finalize } from 'rxjs/operators';
 import { of } from 'rxjs';
 
