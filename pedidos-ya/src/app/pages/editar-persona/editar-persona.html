@@ -1,81 +1,113 @@
 <div class="container" id="EditarPersona-container">
-    <div class="container d-flex justify-content-center align-items-center">
-        <div class="card p-4">
+    <div class="container d-flex justify-content-center align-items-center vh-100">
+        <div class="card p-4" style="width: 800px;">
             <h2 class="text-center mb-4">Editar Persona</h2>
-            <form>
+
+            <!-- Estado de carga y error -->
+            @if (isLoading) {
+            <p class="text-center">Cargando datos de la persona...</p>
+            } @else if (errorMessage) {
+            <div class="alert alert-danger">{{ errorMessage }}</div>
+            } @else {
+            <!-- Formulario reactivo -->
+            <form [formGroup]="editForm" (ngSubmit)="onSubmit()" novalidate>
                 <div class="row gx-5">
+                    <!-- Columna Izquierda -->
                     <div class="col-md-6">
                         <div class="mb-3">
-                            <label for="NOMBRE" class="form-label">NOMBRE</label>
-                            <input type="text" class="form-control" id="NOMBRE" placeholder="Martín Andrés">
+                            <label for="firstName" class="form-label">NOMBRE</label>
+                            <input type="text" class="form-control" id="firstName" formControlName="firstName">
+                            <!-- CORRECCIÓN: Usar notación de corchetes para acceder a los controles y sus errores -->
+                            @if (f['firstName'].invalid && (f['firstName'].dirty || f['firstName'].touched)) {
+                            <div class="text-danger small mt-1">
+                                @if (f['firstName'].errors?.['required']) { <span>El nombre es requerido.</span> }
+                                @if (f['firstName'].errors?.['minlength']) { <span>Debe tener al menos 2
+                                    caracteres.</span> }
+                            </div>
+                            }
                         </div>
                         <div class="mb-3">
-                            <label for="APELLIDO" class="form-label">APELLIDO</label>
-                            <input type="text" class="form-control" id="APELLIDO" placeholder="Costamagna Salcito">
+                            <label for="lastName" class="form-label">APELLIDO</label>
+                            <input type="text" class="form-control" id="lastName" formControlName="lastName">
+                            @if (f['lastName'].invalid && (f['lastName'].dirty || f['lastName'].touched)) {
+                            <div class="text-danger small mt-1">
+                                @if (f['lastName'].errors?.['required']) { <span>El apellido es requerido.</span> }
+                                @if (f['lastName'].errors?.['minlength']) { <span>Debe tener al menos 2
+                                    caracteres.</span> }
+                            </div>
+                            }
                         </div>
                         <div class="mb-3">
-                            <label for=" EMAIL" class="form-label">EMAIL</label>
-                            <input type="email" class="form-control" id=" EMAIL"
-                                placeholder="martinandrecosta@gmail.com">
+                            <label for="email" class="form-label">EMAIL</label>
+                            <input type="email" class="form-control" id="email" formControlName="email">
+                            @if (f['email'].invalid && (f['email'].dirty || f['email'].touched)) {
+                            <div class="text-danger small mt-1">
+                                @if (f['email'].errors?.['required']) { <span>El email es requerido.</span> }
+                                @if (f['email'].errors?.['email']) { <span>El formato del email no es válido.</span> }
+                            </div>
+                            }
                         </div>
                         <div class="mb-3">
-                            <label for="CONTRASEÑA" class="form-label">CONTRASEÑA</label>
-                            <input type="password" class="form-control" id="CONTRASEÑA" placeholder="********">
+                            <label for="password" class="form-label">NUEVA CONTRASEÑA</label>
+                            <input type="password" class="form-control" id="password" formControlName="password"
+                                placeholder="Dejar en blanco para no cambiar">
+                            @if (f['password'].invalid && (f['password'].dirty || f['password'].touched)) {
+                            <div class="text-danger small mt-1">
+                                @if (f['password'].errors?.['minlength']) { <span>Debe tener al menos 6
+                                    caracteres.</span> }
+                            </div>
+                            }
                         </div>
                     </div>
+                    <!-- Columna Derecha -->
                     <div class="col-md-6">
                         <div class="mb-3">
-                            <label for="FECHA DE NACIMIENTO" class="form-label">FECHA DE NACIMIENTO</label>
-                            <input type="text" class="form-control" id="FECHA DE NACIMIENTO" placeholder="01/06/2005">
+                            <label for="birthDate" class="form-label">FECHA DE NACIMIENTO</label>
+                            <input type="date" class="form-control" id="birthDate" formControlName="birthDate">
                         </div>
                         <div class="mb-3">
-                            <label for="PAIS" class="form-label">PAIS</label>
-                            <select class="form-select" id="PAIS">
-                                <option value="Argentina" selected disabled>Argentina</option>
-                                <option value="Argentina">Argentina</option>
-                                <option value="Uruguay">Uruguay</option>
-                                <option value="Chile">Chile</option>
-                                <option value="Paraguay">Paraguay</option>
+                            <label for="country" class="form-label">PAIS</label>
+                            <select class="form-select" id="country" disabled>
+                                <!-- Lógica para cargar dinámicamente -->
+                                <option>Argentina</option>
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="PROVINCIA" class="form-label">PROVINCIA</label>
-                            <select class="form-select" id="PROVINCIA">
-                                <option value="Cordoba" selected disabled>Cordoba</option>
-                                <option value="Cordoba">Cordoba</option>
-                                <option value="Buenos Aires">Buenos Aires</option>
-                                <option value="Santa Fe">Santa Fe</option>
-                                <option value="Mendoza">Mendoza</option>
+                            <label for="province" class="form-label">PROVINCIA</label>
+                            <select class="form-select" id="province" disabled>
+                                <!-- Lógica para cargar dinámicamente -->
+                                <option>Córdoba</option>
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="LOCALIDAD" class="form-label">LOCALIDAD</label>
-                            <select class="form-select" id="LOCALIDAD">
-                                <option value="Canals" selected disabled>Canals</option>
-                                <option value="Canals">Canals</option>
-                                <option value="Villa Maria">Villa Maria</option>
-                                <option value="Cordoba">Cordoba</option>
+                            <label for="cityId" class="form-label">LOCALIDAD</label>
+                            <select class="form-select" id="cityId" formControlName="cityId">
+                                <option [ngValue]="null">Seleccione una localidad</option>
+                                <!-- Lógica para cargar dinámicamente con un @for -->
+                                <option value="1223">Canals</option>
                             </select>
                         </div>
                     </div>
                 </div>
-                <div class="row justify-content-center">
+                <div class="row justify-content-center mt-3">
                     <div class="col-md-8">
                         <div class="mb-3">
-                            <label for="ROL" class="form-label">ROL</label>
-                            <select class="form-select" id="ROL">
-                                <option value="Moderador" selected disabled>Moderador</option>
-                                <option value="Usuario">Usuario</option>
-                                <option value="Administrador">Administrador</option>
-                                <option value="Moderador">Moderador</option>
+                            <label for="role" class="form-label">ROL</label>
+                            <select class="form-select" id="role" formControlName="role">
+                                @for(role of roles; track role.value) {
+                                <option [value]="role.value">{{role.label}}</option>
+                                }
                             </select>
                         </div>
                     </div>
                 </div>
-                <div class="col-12 text-center">
-                    <button type="submit" class="btn btn-primary w-50">Guardar</button>
+                <div class="col-12 text-center mt-3">
+                    <button type="submit" class="btn btn-primary w-50" [disabled]="editForm.invalid || isLoading">
+                        @if(isLoading) { <span>Guardando...</span> } @else { <span>Guardar</span> }
+                    </button>
                 </div>
             </form>
+            }
         </div>
     </div>
 </div>

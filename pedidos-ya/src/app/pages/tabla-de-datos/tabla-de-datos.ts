@@ -1,25 +1,20 @@
-// src/app/components/tabla-de-datos/tabla-de-datos.component.ts
+// src/app/components/tabla-de-datos/tabla-de-datos.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { PersonsService } from '../../services/person';
 import { Person } from '../../models/person.model';
-import { PaginationMeta, PaginatedResponse } from '../../models/pagination.model';
+import { PaginationMeta } from '../../models/pagination.model';
 
 @Component({
   selector: 'app-tabla-de-datos',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    DatePipe
-  ],
+  imports: [CommonModule, RouterModule, DatePipe],
   templateUrl: './tabla-de-datos.html',
   styleUrls: ['./tabla-de-datos.css']
 })
 export class TablaDeDatos implements OnInit {
 
-  // --- ESTADO DEL COMPONENTE ---
   public persons: Person[] = [];
   public meta: PaginationMeta | null = null;
   public isLoading = true;
@@ -28,20 +23,34 @@ export class TablaDeDatos implements OnInit {
 
   constructor(
     private personsService: PersonsService,
-    private router: Router
+    private router: Router // Inyectamos el Router para la navegación
   ) { }
 
   ngOnInit(): void {
     this.loadPersons(1);
   }
 
-  loadPersons(page: number, limit: number = 10): void {
+  // --- LÓGICA DE NAVEGACIÓN PARA EDITAR ---
+  editSelectedPerson(): void {
+    // Si no hay exactamente un usuario seleccionado, no hacemos nada.
+    if (this.selectedIds.size !== 1) {
+      alert('Por favor, seleccione una única persona para editar.');
+      return;
+    }
+    // Obtenemos el primer (y único) ID del Set
+    const selectedId = this.selectedIds.values().next().value;
+    // Navegamos a la ruta de edición, pasando el ID como parámetro
+    this.router.navigate(['/EditarPersona', selectedId]);
+  }
+
+  // --- MÉTODOS EXISTENTES (sin cambios) ---
+  loadPersons(page: number, limit: number = 5): void { // Cambiado a 5 para pruebas
     this.isLoading = true;
     this.errorMessage = null;
     this.selectedIds.clear();
 
     this.personsService.getPersons(page, limit).subscribe({
-      next: (response: PaginatedResponse<Person>) => {
+      next: (response) => {
         this.persons = response.data;
         this.meta = response.meta;
         this.isLoading = false;
@@ -74,24 +83,15 @@ export class TablaDeDatos implements OnInit {
     }
   }
 
-  editSelectedPerson(): void {
-    if (this.selectedIds.size !== 1) {
-      alert('Por favor, seleccione una única persona para editar.');
-      return;
-    }
-    const selectedId = this.selectedIds.values().next().value;
-    this.router.navigate(['/EditarPersona', selectedId]);
-  }
-
   deleteSelectedPersons(): void {
     if (this.selectedIds.size === 0) {
       alert('Por favor, seleccione al menos una persona para eliminar.');
       return;
     }
+
     if (confirm(`¿Está seguro de que desea eliminar ${this.selectedIds.size} persona(s)?`)) {
       const idsToDelete = Array.from(this.selectedIds);
       idsToDelete.forEach((id, index) => {
-        // Usamos el método deletePerson que elimina de a uno
         this.personsService.deletePerson(id).subscribe({
           next: () => {
             console.log(`Persona con ID ${id} eliminada.`);
@@ -116,38 +116,23 @@ export class TablaDeDatos implements OnInit {
   }
 
   get paginationNumbers(): (number | string)[] {
-    if (!this.meta) {
-      return [];
-    }
-
+    if (!this.meta) return [];
     const { currentPage, totalPages } = this.meta;
-    const delta = 2;
-    const range = [];
-    const rangeWithDots: (number | string)[] = [];
-
+    const delta = 2, range = [], rangeWithDots: (number | string)[] = [];
     range.push(1);
     for (let i = Math.max(2, currentPage - delta); i <= Math.min(totalPages - 1, currentPage + delta); i++) {
-      if (!range.includes(i)) {
-        range.push(i);
-      }
+      if (!range.includes(i)) range.push(i);
     }
-    if (totalPages > 1 && !range.includes(totalPages)) {
-      range.push(totalPages);
-    }
-
+    if (totalPages > 1 && !range.includes(totalPages)) range.push(totalPages);
     let l: number | null = null;
     for (const i of range) {
       if (l !== null) {
-        if (i - l === 2) {
-          rangeWithDots.push(l + 1);
-        } else if (i - l > 2) {
-          rangeWithDots.push('...');
-        }
+        if (i - l === 2) rangeWithDots.push(l + 1);
+        else if (i - l > 2) rangeWithDots.push('...');
       }
       rangeWithDots.push(i);
       l = i;
     }
-
     return rangeWithDots;
   }
 }

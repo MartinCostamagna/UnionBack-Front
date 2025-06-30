@@ -17,9 +17,7 @@ export class PersonsService {
   constructor(private http: HttpClient, private authService: AuthService) { }
 
   private getAuthHeaders(): HttpHeaders | null {
-    // Le pedimos el token directamente al AuthService
     const token = this.authService.getToken();
-
     if (!token) {
       return null;
     }
@@ -45,6 +43,23 @@ export class PersonsService {
           return throwError(() => new Error('Error al obtener los datos de las personas.'));
         })
       );
+  }
+
+  getPersonById(id: number): Observable<Person> {
+    const headers = this.getAuthHeaders();
+    if (!headers) {
+      return throwError(() => new Error('No se encontró el token de autenticación.'));
+    }
+    return this.http.get<Person>(`${this.apiUrl}${this.endpoint}/${id}`, { headers });
+  }
+
+  updatePerson(id: number, personData: Partial<Person>): Observable<Person> {
+    const headers = this.getAuthHeaders();
+    if (!headers) {
+      return throwError(() => new Error('No se encontró el token de autenticación.'));
+    }
+    // Usamos PATCH para actualizaciones parciales, que es lo que hace nuestro formulario de edición.
+    return this.http.patch<Person>(`${this.apiUrl}${this.endpoint}/${id}`, personData, { headers });
   }
 
   deletePerson(id: number): Observable<void> {
