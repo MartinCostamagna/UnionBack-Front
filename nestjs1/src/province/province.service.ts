@@ -2,14 +2,14 @@
 import { Injectable, NotFoundException, ConflictException, Logger, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, ILike, Not, FindManyOptions } from 'typeorm';
-import { Province } from './entities/province.entity';
-import { Country } from '../country/entities/country.entity';
-import { CreateProvinceDto } from './dto/create-province.dto';
-import { UpdateProvinceDto } from './dto/update-patch-province.dto';
-import { UpdatePutProvinceDto } from './dto/update-put-province.dto';
-import { ProvinceResponseDto } from './interfaces/province.interfaces';
-import { PaginationDto } from '../common/dto/pagination.dto';
-import { PaginatedResponseDto } from '../common/dto/paginated-response.dto';
+import { Province } from '../entities/province.entity';
+import { Country } from '../entities/country.entity';
+import { CreateProvinceDto } from '../dto/create-province.dto';
+import { UpdateProvinceDto } from '../dto/update-patch-province.dto';
+import { UpdatePutProvinceDto } from '../dto/update-put-province.dto';
+import { ProvinceResponseDto } from '../interfaces/province.interfaces';
+import { PaginationDto } from '../dto/pagination.dto';
+import { PaginatedResponseDto } from '../dto/paginated-response.dto';
 
 @Injectable()
 export class ProvincesService {

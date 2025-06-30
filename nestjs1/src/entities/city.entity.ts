@@ -1,7 +1,7 @@
 // src/city/entities/city.entity.ts
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, JoinColumn, Unique } from 'typeorm';
-import { Province } from '../../province/entities/province.entity';
-import { Person } from '../../person/entities/person.entity';
+import { Province } from '../entities/province.entity';
+import { Person } from '../entities/person.entity';
 
 @Entity('cities')
 // Latitud y longitud como identificador único para la ciudad.

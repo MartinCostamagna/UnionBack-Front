@@ -11,3 +11,4 @@ npm run migration:generate
 npm run migration:run
 npm run create:admin
 nest start
+ng serve 

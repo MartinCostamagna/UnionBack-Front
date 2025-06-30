@@ -4,17 +4,17 @@ import {
   ParseIntPipe, UseGuards, HttpCode, HttpStatus, Logger, Query, BadRequestException
 } from '@nestjs/common';
 import { CitiesService } from './city.service';
-import { CreateCityDto } from './dto/create-city.dto';
-import { UpdateCityDto } from './dto/update-patch-city.dto';
-import { UpdatePutCityDto } from './dto/update-put-city.dto';
+import { CreateCityDto } from '../dto/create-city.dto';
+import { UpdateCityDto } from '../dto/update-patch-city.dto';
+import { UpdatePutCityDto } from '../dto/update-put-city.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
-import { PersonRole } from '../person/entities/person.entity';
-import { CityResponseDto } from './interfaces/city.interfaces';
+import { PersonRole } from '../entities/person.entity';
+import { CityResponseDto } from '../interfaces/city.interfaces';
 
-import { PaginationDto } from '../common/dto/pagination.dto';
-import { PaginatedResponseDto } from '../common/dto/paginated-response.dto';
+import { PaginationDto } from '../dto/pagination.dto';
+import { PaginatedResponseDto } from '../dto/paginated-response.dto';
 import { Public } from '../auth/decorators/public.decorator';
 
 @Controller('cities')

@@ -9,7 +9,7 @@ import {
   GeorefProvinciasResponse,
   GeorefMunicipio,
   GeorefMunicipiosResponse
-} from './interfaces/georef.interfaces'; // RUTA CORREGIDA
+} from '../interfaces/georef.interfaces'; // RUTA CORREGIDA
 
 @Injectable()
 export class GeorefService {

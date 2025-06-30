@@ -1,5 +1,5 @@
 // src/auth/interfaces/jwt-payload.interface.ts
-import { PersonRole } from "../../person/entities/person.entity"; // RUTA CORREGIDA
+import { PersonRole } from "../../entities/person.entity"; // RUTA CORREGIDA
 
 export interface JwtPayload {
   sub: number;

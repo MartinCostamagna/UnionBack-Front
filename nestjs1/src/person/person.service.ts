@@ -2,14 +2,14 @@
 import { Injectable, NotFoundException, BadRequestException, ConflictException, Logger, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, ILike, Not, FindManyOptions } from 'typeorm';
-import { Person, PersonRole } from './entities/person.entity';
-import { CreatePersonDto } from './dto/create-person.dto';
-import { UpdatePatchPersonDto } from './dto/update-patch-person.dto';
-import { UpdatePutPersonDto } from './dto/update-put-person.dto';
-import { City } from '../city/entities/city.entity';
-import { PaginationDto } from '../common/dto/pagination.dto';
-import { PaginatedResponseDto } from '../common/dto/paginated-response.dto';
-import { PersonResponseDto, CityResponse, ProvinceResponse, CountryResponse } from './interfaces/person.interfaces';
+import { Person, PersonRole } from '../entities/person.entity';
+import { CreatePersonDto } from '../dto/create-person.dto';
+import { UpdatePatchPersonDto } from '../dto/update-patch-person.dto';
+import { UpdatePutPersonDto } from '../dto/update-put-person.dto';
+import { City } from '../entities/city.entity';
+import { PaginationDto } from '../dto/pagination.dto';
+import { PaginatedResponseDto } from '../dto/paginated-response.dto';
+import { PersonResponseDto, CityResponse, ProvinceResponse, CountryResponse } from '../interfaces/person.interfaces';
 
 /**
  * Función de ayuda para corregir la zona horaria de una fecha.

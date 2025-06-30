@@ -9,8 +9,8 @@ import * as path from 'path';
 const envFile = process.env.NODE_ENV === 'test' ? '.env.test' : '.env';
 dotenv.config({ path: path.resolve(process.cwd(), envFile) });
 
-import { Person, PersonRole } from '../person/entities/person.entity';
-import { City } from '../city/entities/city.entity'; // Asegúrate de importar City si es necesario
+import { Person, PersonRole } from '../entities/person.entity';
+import { City } from '../entities/city.entity'; // Asegúrate de importar City si es necesario
 
 // Importar la configuración de la fuente de datos
 import dataSource from '../data-source'; // Importa la instancia default

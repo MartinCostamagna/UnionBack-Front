@@ -1,11 +1,11 @@
 // src/database/data-seeding/data-seeding.controller.ts
 import { Controller, Post, Body, UseGuards, HttpCode, HttpStatus, Logger, UnauthorizedException } from '@nestjs/common';
 import { DataSeedingService } from './data-seeding.service';
-import { TriggerSeedingDto } from './dto/trigger-seeding.dto';
+import { TriggerSeedingDto } from '../../dto/trigger-seeding.dto';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard'; // Ajusta la ruta si es necesario
 import { RolesGuard } from '../../auth/guards/roles.guard';     // Ajusta la ruta si es necesario
 import { Roles } from '../../auth/decorators/roles.decorator';   // Ajusta la ruta si es necesario
-import { PersonRole } from '../../person/entities/person.entity'; // Ajusta la ruta si es necesario
+import { PersonRole } from '../../entities/person.entity'; // Ajusta la ruta si es necesario
 import { ConfigService } from '@nestjs/config';
 
 @Controller('seed') // Ruta base para operaciones de siembra

@@ -4,14 +4,14 @@ import { CountriesService } from '../../country/country.service';
 import { ProvincesService } from '../../province/province.service';
 import { CitiesService } from '../../city/city.service';
 import { GeorefService } from '../../georef/georef.service';
-import { GeorefProvincia, GeorefMunicipio } from '../../georef/interfaces/georef.interfaces';
-import { CreateCountryDto } from '../../country/dto/create-country.dto';
-import { CreateProvinceDto } from '../../province/dto/create-province.dto';
-import { CreateCityDto } from '../../city/dto/create-city.dto';
+import { GeorefProvincia, GeorefMunicipio } from '../../interfaces/georef.interfaces';
+import { CreateCountryDto } from '../../dto/create-country.dto';
+import { CreateProvinceDto } from '../../dto/create-province.dto';
+import { CreateCityDto } from '../../dto/create-city.dto';
 import { ConfigService } from '@nestjs/config';
-import { Country } from '../../country/entities/country.entity';
-import { Province } from '../../province/entities/province.entity'; 
-import { City } from '../../city/entities/city.entity'; 
+import { Country } from '../../entities/country.entity';
+import { Province } from '../../entities/province.entity'; 
+import { City } from '../../entities/city.entity'; 
 
 @Injectable()
 export class DataSeedingService implements OnApplicationBootstrap {

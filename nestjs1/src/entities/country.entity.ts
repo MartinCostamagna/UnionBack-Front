@@ -1,6 +1,6 @@
 // src/country/entities/country.entity.ts
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, Index } from 'typeorm';
-import { Province } from '../../province/entities/province.entity';
+import { Province } from '../entities/province.entity';
 
 @Entity('countries') // Tabla 'countries'
 export class Country {

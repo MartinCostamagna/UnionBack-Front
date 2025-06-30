@@ -2,13 +2,13 @@
 import { Injectable, NotFoundException, ConflictException, Logger, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, ILike, Not, FindManyOptions } from 'typeorm';
-import { Country } from './entities/country.entity';
-import { CreateCountryDto } from './dto/create-country.dto';
-import { UpdateCountryDto } from './dto/update-patch-country.dto';
-import { UpdatePutCountryDto } from './dto/update-put-country.dto';
-import { CountryResponseDto } from './interfaces/country.interfaces';
-import { PaginationDto } from '../common/dto/pagination.dto';
-import { PaginatedResponseDto } from '../common/dto/paginated-response.dto'; 
+import { Country } from '../entities/country.entity';
+import { CreateCountryDto } from '../dto/create-country.dto';
+import { UpdateCountryDto } from '../dto/update-patch-country.dto';
+import { UpdatePutCountryDto } from '../dto/update-put-country.dto';
+import { CountryResponseDto } from '../interfaces/country.interfaces';
+import { PaginationDto } from '../dto/pagination.dto';
+import { PaginatedResponseDto } from '../dto/paginated-response.dto'; 
 
 @Injectable()
 export class CountriesService {

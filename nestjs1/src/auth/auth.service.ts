@@ -3,7 +3,7 @@ import { Injectable, UnauthorizedException, Logger, ConflictException, BadReques
 import { PersonService } from '../person/person.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { Person } from '../person/entities/person.entity';
+import { Person } from '../entities/person.entity';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
 import { RegisterPersonDto } from './dto/register-person.dto';
 import { CitiesService } from '../city/city.service'; // Importar CitiesService

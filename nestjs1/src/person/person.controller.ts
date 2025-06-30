@@ -4,17 +4,17 @@ import {
   ParseIntPipe, UseGuards, HttpCode, HttpStatus, Logger, Query, Req, BadRequestException
 } from '@nestjs/common';
 import { PersonService } from './person.service';
-import { CreatePersonDto } from './dto/create-person.dto';
-import { UpdatePutPersonDto } from './dto/update-put-person.dto';
-import { UpdatePatchPersonDto } from './dto/update-patch-person.dto';
+import { CreatePersonDto } from '../dto/create-person.dto';
+import { UpdatePutPersonDto } from '../dto/update-put-person.dto';
+import { UpdatePatchPersonDto } from '../dto/update-patch-person.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
-import { PersonRole } from './entities/person.entity';
-import { PersonResponseDto } from './interfaces/person.interfaces';
+import { PersonRole } from '../entities/person.entity';
+import { PersonResponseDto } from '../interfaces/person.interfaces';
 
-import { PaginationDto } from '../common/dto/pagination.dto'; // NUEVO
-import { PaginatedResponseDto } from '../common/dto/paginated-response.dto'; // NUEVO
+import { PaginationDto } from '../dto/pagination.dto'; // NUEVO
+import { PaginatedResponseDto } from '../dto/paginated-response.dto'; // NUEVO
 
 @Controller('persons')
 @UseGuards(JwtAuthGuard)

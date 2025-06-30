@@ -1,7 +1,7 @@
 // src/countries/country.module.ts
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Country } from './entities/country.entity';
+import { Country } from '../entities/country.entity';
 import { CountriesService } from './country.service';
 import { CountriesController } from './country.controller';
 // No necesita importar Province o City aquí a menos que el servicio los use directamente,

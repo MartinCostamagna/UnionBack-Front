@@ -4,17 +4,17 @@ import {
   ParseIntPipe, UseGuards, HttpCode, HttpStatus, Logger, Query, BadRequestException
 } from '@nestjs/common';
 import { ProvincesService } from './province.service';
-import { CreateProvinceDto } from './dto/create-province.dto';
-import { UpdateProvinceDto } from './dto/update-patch-province.dto';
-import { UpdatePutProvinceDto } from './dto/update-put-province.dto';
+import { CreateProvinceDto } from '../dto/create-province.dto';
+import { UpdateProvinceDto } from '../dto/update-patch-province.dto';
+import { UpdatePutProvinceDto } from '../dto/update-put-province.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
-import { PersonRole } from '../person/entities/person.entity';
-import { ProvinceResponseDto } from './interfaces/province.interfaces';
+import { PersonRole } from '../entities/person.entity';
+import { ProvinceResponseDto } from '../interfaces/province.interfaces';
 
-import { PaginationDto } from '../common/dto/pagination.dto'; // NUEVO
-import { PaginatedResponseDto } from '../common/dto/paginated-response.dto'; // NUEVO
+import { PaginationDto } from '../dto/pagination.dto'; // NUEVO
+import { PaginatedResponseDto } from '../dto/paginated-response.dto'; // NUEVO
 import { Public } from '../auth/decorators/public.decorator';
 
 @Controller('provinces')

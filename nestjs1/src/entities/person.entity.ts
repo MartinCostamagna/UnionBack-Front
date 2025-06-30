@@ -11,7 +11,7 @@ import {
   BeforeInsert,
   BeforeUpdate,
 } from 'typeorm';
-import { City } from '../../city/entities/city.entity';
+import { City } from '../entities/city.entity';
 import * as bcrypt from 'bcrypt';
 
 export enum PersonRole {

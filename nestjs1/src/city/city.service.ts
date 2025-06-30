@@ -2,14 +2,14 @@
 import { Injectable, NotFoundException, Logger, ConflictException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, ILike, Not, FindManyOptions, FindOptionsWhere } from 'typeorm';
-import { City } from './entities/city.entity';
-import { Province } from '../province/entities/province.entity';
-import { CreateCityDto } from './dto/create-city.dto';
-import { UpdateCityDto } from './dto/update-patch-city.dto';
-import { UpdatePutCityDto } from './dto/update-put-city.dto';
-import { CityResponseDto } from './interfaces/city.interfaces';
-import { PaginationDto } from '../common/dto/pagination.dto';
-import { PaginatedResponseDto } from '../common/dto/paginated-response.dto';
+import { City } from '../entities/city.entity';
+import { Province } from '../entities/province.entity';
+import { CreateCityDto } from '../dto/create-city.dto';
+import { UpdateCityDto } from '../dto/update-patch-city.dto';
+import { UpdatePutCityDto } from '../dto/update-put-city.dto';
+import { CityResponseDto } from '../interfaces/city.interfaces';
+import { PaginationDto } from '../dto/pagination.dto';
+import { PaginatedResponseDto } from '../dto/paginated-response.dto';
 
 @Injectable()
 export class CitiesService {

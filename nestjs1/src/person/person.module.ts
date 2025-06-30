@@ -1,11 +1,11 @@
 // src/person/person.module.ts
 import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Person } from './entities/person.entity';
+import { Person } from '../entities/person.entity';
 import { PersonService } from './person.service';       // Nombre de servicio singular
 import { PersonController } from './person.controller';   // Nombre de controlador singular
 import { AuthModule } from '../auth/auth.module';
-import { City } from '../city/entities/city.entity';   // Ruta ajustada
+import { City } from '../entities/city.entity';   // Ruta ajustada
 
 @Module({
   imports: [
