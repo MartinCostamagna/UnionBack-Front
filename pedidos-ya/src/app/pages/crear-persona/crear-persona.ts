@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { PersonsService } from '../../services/person';
 import { HttpErrorResponse } from '@angular/common/http';
 
@@ -18,7 +18,7 @@ import { catchError, finalize, of, tap } from 'rxjs';
 @Component({
   selector: 'app-crear-persona',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, RouterModule, ReactiveFormsModule],
   templateUrl: './crear-persona.html',
   styleUrls: ['./crear-persona.css']
 })
@@ -26,6 +26,7 @@ export class CrearPersona implements OnInit {
   createForm!: FormGroup;
   isLoading = false;
   errorMessage: string | null = null;
+  public backUrl: string = '/home';
 
   // Arrays para los datos de los desplegables
   countries: Country[] = [];
@@ -46,6 +47,7 @@ export class CrearPersona implements OnInit {
   constructor(
     private fb: FormBuilder,
     private router: Router,
+    private route: ActivatedRoute,
     private personsService: PersonsService,
     private countriesService: CountriesService,
     private provincesService: ProvincesService,
@@ -53,6 +55,11 @@ export class CrearPersona implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      if (params['from']) {
+        this.backUrl = params['from'];
+      }
+    });
     this.createForm = this.fb.group({
       firstName: ['', [Validators.required, Validators.minLength(2)]],
       lastName: ['', [Validators.required, Validators.minLength(2)]],

@@ -54,14 +54,18 @@
 
     <!-- Botones de Acción -->
     <div class="row gx-3 my-4">
-        <div class="col-md-4 text-center mb-2">
-            <button type="button" class="btn btn-primary w-75" routerLink="/CrearPersona">Crear</button>
+        <div class="col-md-3 text-center mb-2">
+            <button type="button" class="btn btn-primary w-75" routerLink="/home">Atras</button>
         </div>
-        <div class="col-md-4 text-center mb-2">
+        <div class="col-md-3 text-center mb-2">
+            <button type="button" class="btn btn-primary w-75" routerLink="/CrearPersona"
+                [queryParams]="{ from: '/TablaDeDatos' }">Crear</button>
+        </div>
+        <div class="col-md-3 text-center mb-2">
             <button type="button" class="btn btn-secondary w-75" [disabled]="selectedIds.size !== 1"
                 (click)="editSelectedPerson()">Editar</button>
         </div>
-        <div class="col-md-4 text-center mb-2">
+        <div class="col-md-3 text-center mb-2">
             <button type="button" class="btn btn-danger w-75" [disabled]="selectedIds.size === 0"
                 (click)="deleteSelectedPersons()">Eliminar</button>
         </div>

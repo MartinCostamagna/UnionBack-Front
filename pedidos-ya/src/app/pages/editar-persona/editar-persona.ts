@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { PersonsService } from '../../services/person';
 import { Person } from '../../models/person.model';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -17,7 +17,7 @@ import { City } from '../../models/city.model';
 @Component({
   selector: 'app-editar-persona',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './editar-persona.html',
   styleUrls: ['./editar-persona.css']
 })
