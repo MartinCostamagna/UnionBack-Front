@@ -2,10 +2,10 @@
 import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Person } from '../entities/person.entity';
-import { PersonService } from './person.service';       // Nombre de servicio singular
-import { PersonController } from './person.controller';   // Nombre de controlador singular
+import { PersonService } from './person.service';
+import { PersonController } from './person.controller';
 import { AuthModule } from '../auth/auth.module';
-import { City } from '../entities/city.entity';   // Ruta ajustada
+import { City } from '../entities/city.entity';
 
 @Module({
   imports: [
@@ -16,4 +16,4 @@ import { City } from '../entities/city.entity';   // Ruta ajustada
   providers: [PersonService],
   exports: [PersonService, TypeOrmModule.forFeature([Person])],
 })
-export class PersonsModule {} // Mantengo PersonsModule como nombre de clase si así lo tienes
+export class PersonsModule { }

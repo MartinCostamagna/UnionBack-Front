@@ -6,7 +6,7 @@ import * as bcrypt from 'bcrypt';
 import { Person } from '../entities/person.entity';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
 import { RegisterPersonDto } from './dto/register-person.dto';
-import { CitiesService } from '../city/city.service'; // Importar CitiesService
+import { CitiesService } from '../city/city.service';
 
 @Injectable()
 export class AuthService {
@@ -49,17 +49,14 @@ export class AuthService {
   async register(registerPersonDto: RegisterPersonDto): Promise<{ message: string; userId: number }> {
     this.logger.debug(`Intentando registrar nueva persona con email: ${registerPersonDto.email}`);
 
-    // 1. Desestructura todos los datos del DTO
     const { email, password, cityName, provinceName, ...personData } = registerPersonDto;
 
-    // 2. VERIFICAR SI EL EMAIL YA EXISTE
     const existingUser = await this.personsService.findByEmailForAuth(email);
     if (existingUser) {
       this.logger.warn(`Registro fallido: El email '${email}' ya está en uso.`);
       throw new ConflictException(`El email '${email}' ya está registrado.`);
     }
 
-    // 3. BUSCAR Y VALIDAR LA CIUDAD (Tu código original, está perfecto)
     let cityIdToAssign: number | undefined = undefined;
     if (cityName) {
       const city = await this.citiesService.findOneByNameAndProvinceName(cityName, provinceName);
@@ -71,11 +68,9 @@ export class AuthService {
       this.logger.log(`Ciudad encontrada para el registro: ID ${cityIdToAssign}, Nombre: ${city.name}`);
     }
 
-    // 4. HASHEAR LA CONTRASEÑA
-    const hashedPassword = await bcrypt.hash(password, 10); // 10 es el "costo" o "rondas" del hasheo
+    const hashedPassword = await bcrypt.hash(password, 10);
     this.logger.debug(`Contraseña hasheada para el usuario ${email}`);
 
-    // 5. CREAR Y GUARDAR EL NUEVO USUARIO
     try {
       const newUser = await this.personsService.create({
         ...personData,
@@ -103,7 +98,6 @@ export class AuthService {
           error,
         );
       }
-      // Puedes mantener esta excepción genérica para la respuesta al cliente
       throw new BadRequestException('No se pudo completar el registro, por favor intente de nuevo.');
     }
   }

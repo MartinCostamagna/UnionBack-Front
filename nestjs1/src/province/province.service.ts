@@ -22,7 +22,6 @@ export class ProvincesService {
     private readonly countryRepository: Repository<Country>,
   ) { }
 
-  // defaultRelations solo para 'country' en ProvinceResponseDto
   private readonly defaultRelations = ['country'];
 
   private async findCountryById(countryId: number): Promise<Country> {
@@ -118,7 +117,6 @@ export class ProvincesService {
     }
   }
 
-  // MODIFICADO: Añadido paginationDto
   async findAll(paginationDto: PaginationDto): Promise<PaginatedResponseDto<ProvinceResponseDto>> {
     const { page = 1, limit = 10, sortBy, sortOrder } = paginationDto;
     const skip = (page - 1) * limit;
@@ -157,7 +155,6 @@ export class ProvincesService {
     return returnEntity ? province : this.mapToResponseDto(province);
   }
 
-  // MODIFICADO: Añadido paginationDto
   async findOneByNameAndCountryId(name: string, countryId: number, loadOtherRelations: boolean = false, returnEntity: boolean = false): Promise<Province | ProvinceResponseDto | null> {
     this.logger.debug(`Buscando provincia: ${name}, país ID: ${countryId}`);
     const province = await this.provinceRepository.findOne({
@@ -167,7 +164,6 @@ export class ProvincesService {
     return province ? (returnEntity ? province : this.mapToResponseDto(province)) : null;
   }
 
-  // MODIFICADO: Añadido paginationDto
   async searchByName(term: string, paginationDto: PaginationDto): Promise<PaginatedResponseDto<ProvinceResponseDto>> {
     this.logger.debug(`Buscando provincias por término: ${term}`);
     if (!term || term.trim() === "") {

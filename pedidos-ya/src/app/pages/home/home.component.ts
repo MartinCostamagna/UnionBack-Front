@@ -11,14 +11,14 @@ import { AuthService } from '../../services/auth.service';
 })
 export class HomeComponent implements OnInit {
 
-  // 1. Creamos una propiedad para controlar la visibilidad
+
   canShowAdminButtons = false;
 
-  // 2. Inyectamos el AuthService
+
   constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
-    // 3. Cuando el componente se inicia, verificamos el rol
+    // Cuando el componente se inicia, verificamos el rol
     const userRole = this.authService.getUserRole();
     if (userRole === 'admin' || userRole === 'moderator') {
       this.canShowAdminButtons = true;

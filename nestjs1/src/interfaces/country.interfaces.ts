@@ -3,5 +3,5 @@
 export interface CountryResponseDto {
   id: number;
   name: string;
-  code?: string | null; // Opcional, ya que tu entidad lo permite
+  code?: string | null;
 }

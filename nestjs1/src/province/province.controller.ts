@@ -13,8 +13,8 @@ import { Roles } from '../auth/decorators/roles.decorator';
 import { PersonRole } from '../entities/person.entity';
 import { ProvinceResponseDto } from '../interfaces/province.interfaces';
 
-import { PaginationDto } from '../dto/pagination.dto'; // NUEVO
-import { PaginatedResponseDto } from '../dto/paginated-response.dto'; // NUEVO
+import { PaginationDto } from '../dto/pagination.dto';
+import { PaginatedResponseDto } from '../dto/paginated-response.dto';
 import { Public } from '../auth/decorators/public.decorator';
 
 @Controller('provinces')
@@ -35,22 +35,22 @@ export class ProvincesController {
 
   @Public()
   @Get()
-  findAll(@Query() paginationDto: PaginationDto): Promise<PaginatedResponseDto<ProvinceResponseDto>> { // MODIFICADO
+  findAll(@Query() paginationDto: PaginationDto): Promise<PaginatedResponseDto<ProvinceResponseDto>> {
     this.logger.log(`Recibida solicitud para obtener todas las provincias con paginación: ${JSON.stringify(paginationDto)}`);
-    return this.provincesService.findAll(paginationDto); // MODIFICADO
+    return this.provincesService.findAll(paginationDto);
   }
 
   @Get('search')
-  async searchByName( // MODIFICADO (se añadió async)
-    @Query() paginationDto: PaginationDto // NUEVO: todos los params de búsqueda van en paginationDto
-  ): Promise<PaginatedResponseDto<ProvinceResponseDto>> { // MODIFICADO
+  async searchByName(
+    @Query() paginationDto: PaginationDto
+  ): Promise<PaginatedResponseDto<ProvinceResponseDto>> {
     const name = paginationDto.name; // Obtiene 'name' del DTO de paginación
     this.logger.log(`Buscando provincias por nombre: ${name} con paginación: ${JSON.stringify(paginationDto)}`);
 
     if (!name || name.trim() === '') {
       throw new BadRequestException('El término de búsqueda "name" no puede estar vacío para esta operación.');
     }
-    return this.provincesService.searchByName(name, paginationDto); // MODIFICADO
+    return this.provincesService.searchByName(name, paginationDto);
   }
 
   @Get(':id')
@@ -59,12 +59,10 @@ export class ProvincesController {
     return this.provincesService.findOne(id, false) as Promise<ProvinceResponseDto>;
   }
 
-  @Public() // <-- ¡Importante! Para que sea accesible sin login
+  @Public() // Para que sea accesible sin login
   @Get('by-country/:countryId')
   findProvincesByCountry(@Param('countryId', ParseIntPipe) countryId: number) {
     this.logger.log(`Recibida solicitud para obtener provincias del país con ID: ${countryId}`);
-    // Asumimos que tu servicio tiene un método llamado 'findByCountry'
-    // que busca las provincias por el ID del país.
     return this.provincesService.findByCountry(countryId);
   }
 

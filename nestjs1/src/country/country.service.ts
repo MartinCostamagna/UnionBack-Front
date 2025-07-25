@@ -8,7 +8,7 @@ import { UpdateCountryDto } from '../dto/update-patch-country.dto';
 import { UpdatePutCountryDto } from '../dto/update-put-country.dto';
 import { CountryResponseDto } from '../interfaces/country.interfaces';
 import { PaginationDto } from '../dto/pagination.dto';
-import { PaginatedResponseDto } from '../dto/paginated-response.dto'; 
+import { PaginatedResponseDto } from '../dto/paginated-response.dto';
 
 @Injectable()
 export class CountriesService {
@@ -17,7 +17,7 @@ export class CountriesService {
   constructor(
     @InjectRepository(Country)
     private readonly countryRepository: Repository<Country>,
-  ) {}
+  ) { }
 
   private readonly defaultRelations = ['provinces'];
 
@@ -56,13 +56,12 @@ export class CountriesService {
     return returnEntity ? savedCountry : this.mapToResponseDto(savedCountry);
   }
 
-  // MODIFICADO: Añadido paginationDto, loadRelations ahora es para el servicio, no la API
   async findAll(loadRelations: boolean = false, paginationDto: PaginationDto): Promise<PaginatedResponseDto<CountryResponseDto>> {
     const { page = 1, limit = 10, sortBy, sortOrder } = paginationDto;
     const skip = (page - 1) * limit;
 
     const findOptions: FindManyOptions<Country> = {
-      relations: loadRelations ? this.defaultRelations : [], // `loadRelations` se sigue usando internamente si quieres cargar provincias
+      relations: loadRelations ? this.defaultRelations : [],
       skip: skip,
       take: limit,
     };
@@ -104,7 +103,6 @@ export class CountriesService {
     return country ? (returnEntity ? country : this.mapToResponseDto(country)) : null;
   }
 
-  // MODIFICADO: Añadido paginationDto, loadRelations ahora es para el servicio, no la API
   async searchByName(term: string, loadRelations: boolean = false, paginationDto: PaginationDto): Promise<PaginatedResponseDto<CountryResponseDto>> {
     this.logger.debug(`Buscando países por término: ${term}`);
     if (!term || term.trim() === "") {
@@ -116,7 +114,7 @@ export class CountriesService {
 
     const findOptions: FindManyOptions<Country> = {
       where: { name: ILike(`%${term}%`) },
-      relations: loadRelations ? this.defaultRelations : [], // `loadRelations` se sigue usando internamente
+      relations: loadRelations ? this.defaultRelations : [],
       skip: skip,
       take: limit,
     };
@@ -138,7 +136,7 @@ export class CountriesService {
 
   async updatePut(id: number, updateDto: UpdatePutCountryDto): Promise<CountryResponseDto> {
     this.logger.debug(`Actualizando (PUT) país ID: ${id}`);
-    const entityToUpdate = await this.countryRepository.findOne({ where: {id} });
+    const entityToUpdate = await this.countryRepository.findOne({ where: { id } });
     if (!entityToUpdate) throw new NotFoundException(`País con ID ${id} no encontrado para actualizar.`);
 
     const { name, code } = updateDto;
@@ -186,8 +184,8 @@ export class CountriesService {
     this.logger.debug(`Eliminando país ID: ${id}`);
     const country = await this.countryRepository.findOne({ where: { id }, relations: ['provinces'] });
     if (!country) {
-        this.logger.warn(`País ID ${id} no encontrado para eliminar.`);
-        throw new NotFoundException(`País con ID ${id} no encontrado.`);
+      this.logger.warn(`País ID ${id} no encontrado para eliminar.`);
+      throw new NotFoundException(`País con ID ${id} no encontrado.`);
     }
 
     if (country.provinces && country.provinces.length > 0) {

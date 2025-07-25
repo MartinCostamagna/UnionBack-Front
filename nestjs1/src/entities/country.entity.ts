@@ -2,18 +2,16 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, Index } from 'typeorm';
 import { Province } from '../entities/province.entity';
 
-@Entity('countries') // Tabla 'countries'
+@Entity('countries')
 export class Country {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  // El nombre del país es el identificador principal junto con el código.
-  @Index({ unique: true }) // Índice para asegurar unicidad
+  @Index({ unique: true })
   @Column({ type: 'varchar', length: 100, nullable: false, unique: true })
   name!: string;
 
-  // Código ISO del país, también único si se proporciona.
-  @Index({ unique: true, where: '"code" IS NOT NULL' }) // Índice único condicional
+  @Index({ unique: true, where: '"code" IS NOT NULL' })
   @Column({ type: 'varchar', length: 10, nullable: true, unique: true })
   code!: string | null;
 

@@ -9,8 +9,6 @@ export interface City {
     longitude: number;
     provinceId: number;
 
-    // Propiedades opcionales para las relaciones. La API puede o no
-    // incluirlas en cada respuesta.
     province?: Province;
     persons?: Person[];
 }

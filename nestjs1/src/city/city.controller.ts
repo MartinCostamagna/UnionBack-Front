@@ -35,12 +35,12 @@ export class CitiesController {
 
   @Public()
   @Get()
-  findAll(@Query() paginationDto: PaginationDto): Promise<PaginatedResponseDto<CityResponseDto>> { // MODIFICADO
+  findAll(@Query() paginationDto: PaginationDto): Promise<PaginatedResponseDto<CityResponseDto>> {
     this.logger.log(`Recibida solicitud para obtener todas las ciudades con paginación: ${JSON.stringify(paginationDto)}`);
-    return this.citiesService.findAll(paginationDto); // MODIFICADO
+    return this.citiesService.findAll(paginationDto);
   }
 
-  @Public() // No olvides hacerlo público
+  @Public()
   @Get('by-province/:provinceId')
   findCitiesByProvince(@Param('provinceId', ParseIntPipe) provinceId: number) {
     // Llama al método correspondiente en el servicio de ciudades
@@ -48,16 +48,16 @@ export class CitiesController {
   }
 
   @Get('search')
-  async searchByName( // MODIFICADO (se añadió async)
-    @Query() paginationDto: PaginationDto // NUEVO: todos los params de búsqueda van en paginationDto
-  ): Promise<PaginatedResponseDto<CityResponseDto>> { // MODIFICADO
-    const name = paginationDto.name; // Obtiene 'name' del DTO de paginación
+  async searchByName(
+    @Query() paginationDto: PaginationDto
+  ): Promise<PaginatedResponseDto<CityResponseDto>> {
+    const name = paginationDto.name;
     this.logger.log(`Buscando ciudades por nombre: ${name} con paginación: ${JSON.stringify(paginationDto)}`);
 
     if (!name || name.trim() === '') {
       throw new BadRequestException('El término de búsqueda "name" no puede estar vacío para esta operación.');
     }
-    return this.citiesService.searchByName(name, paginationDto); // MODIFICADO
+    return this.citiesService.searchByName(name, paginationDto);
   }
 
   @Get(':id')

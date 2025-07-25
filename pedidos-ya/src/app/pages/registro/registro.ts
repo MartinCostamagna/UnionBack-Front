@@ -33,18 +33,18 @@ export class Registro implements OnInit {
   provinces: Province[] = [];
   cities: City[] = [];
 
-  // --> Banderas para mostrar spinners de carga y mejorar la UX
+  // Banderas para mostrar spinners de carga y mejorar la UX
   isLoadingCountries = false;
   isLoadingProvinces = false;
   isLoadingCities = false;
 
   constructor(
     private fb: FormBuilder,
-    private router: Router, // --> Inyectamos el Router
+    private router: Router,
     private countriesService: CountriesService,
     private provincesService: ProvincesService,
     private citiesService: CitiesService,
-    private authService: AuthService // --> Usamos AuthService para el registro
+    private authService: AuthService // Usamos AuthService para el registro
   ) { }
 
   ngOnInit(): void {
@@ -52,17 +52,16 @@ export class Registro implements OnInit {
       firstName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
       lastName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
       email: ['', [Validators.required, Validators.email]],
-      // --> Podrías añadir validación con una expresión regular para la contraseña si quieres
       password: ['', [Validators.required, Validators.minLength(8)]],
       birthDate: [null],
-      countryId: [{ value: null, disabled: true }, Validators.required], // --> Deshabilitado hasta que carguen los países
+      countryId: [{ value: null, disabled: true }, Validators.required],
       provinceId: [{ value: null, disabled: true }, Validators.required],
       cityId: [{ value: null, disabled: true }, Validators.required]
     });
 
     this.loadCountries();
 
-    // --> Escuchamos los cambios en los selectores de una forma más reactiva
+    // Escuchamos los cambios en los selectores de una forma más reactiva
     this.onCountryChanges();
     this.onProvinceChanges();
   }
@@ -71,7 +70,6 @@ export class Registro implements OnInit {
     this.isLoadingCountries = true;
     this.countriesService.getCountries().pipe(
       tap(data => {
-        // Si tu API devuelve { data: [...] }, usa: this.countries = data.data;
         this.countries = data.data;
         this.registroForm.get('countryId')?.enable();
       }),
@@ -80,10 +78,10 @@ export class Registro implements OnInit {
         alert('No se pudieron cargar los países. Intente recargar la página.');
         return of([]);
       }),
-      finalize(() => { // <-- USA FINALIZE AQUÍ DENTRO DEL PIPE
+      finalize(() => {
         this.isLoadingCountries = false;
       })
-    ).subscribe(); // <-- Y es importante suscribirse para que la cadena se ejecute
+    ).subscribe();
   }
 
   onCountryChanges(): void {
@@ -104,7 +102,7 @@ export class Registro implements OnInit {
             console.error('Error al cargar provincias', error);
             return of([]);
           }),
-          finalize(() => { // <-- CORRECCIÓN AQUÍ
+          finalize(() => {
             this.isLoadingProvinces = false;
           })
         ).subscribe();
@@ -128,7 +126,7 @@ export class Registro implements OnInit {
             console.error('Error al cargar ciudades', error);
             return of([]);
           }),
-          finalize(() => { // <-- CORRECCIÓN AQUÍ
+          finalize(() => {
             this.isLoadingCities = false;
           })
         ).subscribe();
@@ -145,11 +143,9 @@ export class Registro implements OnInit {
 
     const formValue = this.registroForm.getRawValue();
 
-    // 1. Buscamos los objetos completos para poder obtener sus nombres.
     const selectedProvince = this.provinces.find(p => p.id === formValue.provinceId);
     const selectedCity = this.cities.find(c => c.id === formValue.cityId);
 
-    // 2. Construimos el objeto de datos EXACTAMENTE como lo espera el backend.
     const newPersonData = {
       firstName: formValue.firstName,
       lastName: formValue.lastName,
@@ -157,12 +153,11 @@ export class Registro implements OnInit {
       password: formValue.password,
       birthDate: formValue.birthDate,
 
-      // Enviamos los NOMBRES, no los IDs.
       cityName: selectedCity?.name,     // Usamos el nombre de la ciudad seleccionada
       provinceName: selectedProvince?.name, // Usamos el nombre de la provincia seleccionada
     };
 
-    // 3. Verificamos que no estemos enviando datos nulos si algo falló
+    // Verificamos que no estemos enviando datos nulos si algo falló
     if (!newPersonData.cityName || !newPersonData.provinceName) {
       alert('Hubo un error al seleccionar la ciudad o provincia. Por favor, inténtalo de nuevo.');
       return;

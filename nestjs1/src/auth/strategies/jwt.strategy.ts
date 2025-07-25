@@ -21,9 +21,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     }
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
-        // 1. Intentar obtener el token del encabezado 'Authorization: Bearer ...'
         ExtractJwt.fromAuthHeaderAsBearerToken(),
-        // 2. Si no está en el encabezado, intentar obtenerlo de una cookie llamada 'jwt'
         (request: Request) => request?.cookies?.jwt,
       ]),
       ignoreExpiration: false,
@@ -40,7 +38,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       throw new UnauthorizedException('Token inválido o la persona ya no existe.');
     }
 
-    // Lo que se retorna aquí se adjunta a request.user
     return {
       id: payload.sub,
       email: payload.email,

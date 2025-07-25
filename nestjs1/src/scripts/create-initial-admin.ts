@@ -1,5 +1,5 @@
 // src/scripts/create-initial-admin.ts
-import 'reflect-metadata'; // Necesario para TypeORM
+import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import * as dotenv from 'dotenv';
@@ -10,10 +10,10 @@ const envFile = process.env.NODE_ENV === 'test' ? '.env.test' : '.env';
 dotenv.config({ path: path.resolve(process.cwd(), envFile) });
 
 import { Person, PersonRole } from '../entities/person.entity';
-import { City } from '../entities/city.entity'; // Asegúrate de importar City si es necesario
+import { City } from '../entities/city.entity';
 
-// Importar la configuración de la fuente de datos
-import dataSource from '../data-source'; // Importa la instancia default
+
+import dataSource from '../data-source';
 
 async function createInitialAdmin() {
   console.log('Iniciando script para crear usuario administrador inicial...');
@@ -26,7 +26,7 @@ async function createInitialAdmin() {
     const cityRepository = dataSource.getRepository(City);
 
     const adminEmail = process.env.ADMIN_EMAIL || 'admin@example.com';
-    const adminPassword = process.env.ADMIN_PASSWORD || 'Admin123!'; // ¡Usa una contraseña segura!
+    const adminPassword = process.env.ADMIN_PASSWORD || 'Admin123!';
 
     // Verificar si ya existe un administrador
     const existingAdmin = await personRepository.findOne({
@@ -48,10 +48,7 @@ async function createInitialAdmin() {
     let cityId: number | null = null;
     let city: City | null = null;
     try {
-      // ********** CORRECCIÓN AQUÍ **********
-      // Usa .find() con take: 1 para obtener un array, y luego toma el primer elemento.
       const [firstCity] = await cityRepository.find({ take: 1 });
-      // *************************************
 
       if (firstCity) {
         cityId = firstCity.id;

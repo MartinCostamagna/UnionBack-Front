@@ -13,8 +13,8 @@ import { Roles } from '../auth/decorators/roles.decorator';
 import { PersonRole } from '../entities/person.entity';
 import { CountryResponseDto } from '../interfaces/country.interfaces';
 
-import { PaginationDto } from '../dto/pagination.dto'; // NUEVO
-import { PaginatedResponseDto } from '../dto/paginated-response.dto'; // NUEVO
+import { PaginationDto } from '../dto/pagination.dto';
+import { PaginatedResponseDto } from '../dto/paginated-response.dto';
 import { Public } from '../auth/decorators/public.decorator';
 
 @Controller('countries')
@@ -35,20 +35,20 @@ export class CountriesController {
 
   @Public()
   @Get()
-  findAll(@Query() paginationDto: PaginationDto): Promise<PaginatedResponseDto<CountryResponseDto>> { // MODIFICADO
+  findAll(@Query() paginationDto: PaginationDto): Promise<PaginatedResponseDto<CountryResponseDto>> {
     this.logger.log(`Recibida solicitud para obtener todos los países con paginación: ${JSON.stringify(paginationDto)}`);
-    return this.countriesService.findAll(false, paginationDto); // MODIFICADO (loadRelations es false aquí)
+    return this.countriesService.findAll(false, paginationDto);
   }
 
   @Get('search')
-  async searchByName( // MODIFICADO (se añadió async)
-    @Query() paginationDto: PaginationDto // NUEVO: todos los params de búsqueda van en paginationDto
-  ): Promise<PaginatedResponseDto<CountryResponseDto>> { // MODIFICADO
-    const name = paginationDto.name; // Obtiene 'name' del DTO de paginación
+  async searchByName(
+    @Query() paginationDto: PaginationDto
+  ): Promise<PaginatedResponseDto<CountryResponseDto>> {
+    const name = paginationDto.name;
     if (!name || name.trim() === '') {
       throw new BadRequestException('El término de búsqueda "name" no puede estar vacío para esta operación.');
     }
-    return this.countriesService.searchByName(name, false, paginationDto); // MODIFICADO (loadRelations es false aquí)
+    return this.countriesService.searchByName(name, false, paginationDto);
   }
 
   @Get(':id')

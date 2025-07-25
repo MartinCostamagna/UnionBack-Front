@@ -4,7 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Province } from '../entities/province.entity';
 import { ProvincesService } from './province.service';
 import { ProvincesController } from './province.controller';
-import { Country } from '../entities/country.entity'; // ProvinceService necesita CountryRepository
+import { Country } from '../entities/country.entity';
 
 @Module({
   imports: [
@@ -14,4 +14,4 @@ import { Country } from '../entities/country.entity'; // ProvinceService necesit
   providers: [ProvincesService],
   exports: [ProvincesService], // Exporta el servicio si otros módulos lo necesitan
 })
-export class ProvincesModule {}
+export class ProvincesModule { }

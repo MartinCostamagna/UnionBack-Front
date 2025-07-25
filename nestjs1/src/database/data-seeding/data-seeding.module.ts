@@ -10,14 +10,14 @@ import { DataSeedingController } from './data-seeding.controller';
 
 @Module({
   imports: [
-    ConfigModule, // Asegurar que ConfigService esté disponible
+    ConfigModule,
     CountriesModule,
     ProvincesModule,
     CitiesModule,
     GeorefModule,
   ],
-  controllers: [DataSeedingController], // ¡Añade el controlador aquí!
+  controllers: [DataSeedingController],
   providers: [DataSeedingService],
   exports: [DataSeedingService],
 })
-export class DataSeedingModule {}
+export class DataSeedingModule { }

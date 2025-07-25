@@ -17,13 +17,11 @@ export const dataSourceOptions: DataSourceOptions = {
   username: configService.get<string>('POSTGRES_USER'),
   password: configService.get<string>('POSTGRES_PASSWORD'),
   database: configService.get<string>('POSTGRES_DB'),
-  // Asegúrate que estas rutas sean correctas desde donde se ejecuta la CLI de TypeORM (usualmente la raíz del proyecto)
-  // o desde donde está este archivo si __dirname se resuelve correctamente en ese contexto.
   entities: [path.join(__dirname, '**', '*.entity.{ts,js}')], // Busca entidades en 'src/' si data-source.ts está en 'src/'
   migrations: [path.join(__dirname, 'database/migrations/*{.ts,.js}')], // Busca migraciones en 'src/database/migrations/'
   synchronize: false, // Debe ser false para usar migraciones
   logging: configService.get<string>('TYPEORM_LOGGING') === 'true',
 };
 
-const AppDataSource = new DataSource(dataSourceOptions); // Renombrado para claridad si se exporta
-export default AppDataSource; // Exportar la instancia de DataSource
+const AppDataSource = new DataSource(dataSourceOptions);
+export default AppDataSource;

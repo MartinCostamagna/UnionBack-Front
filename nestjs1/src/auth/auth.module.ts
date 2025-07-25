@@ -7,14 +7,14 @@ import { PersonsModule } from '../person/person.module';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
-import { CitiesModule } from '../city/city.module'; // IMPORTAR CitiesModule
+import { CitiesModule } from '../city/city.module';
 
 @Module({
   imports: [
     ConfigModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     forwardRef(() => PersonsModule),
-    CitiesModule, // AÑADIR CitiesModule a las importaciones
+    CitiesModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -30,4 +30,4 @@ import { CitiesModule } from '../city/city.module'; // IMPORTAR CitiesModule
   providers: [AuthService, JwtStrategy],
   exports: [AuthService, JwtModule, PassportModule],
 })
-export class AuthModule {}
+export class AuthModule { }

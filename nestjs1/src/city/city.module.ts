@@ -2,16 +2,16 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { City } from '../entities/city.entity';
-import { CitiesService } from './city.service'; // Asumiendo que el servicio se llama cities.service.ts
-import { CitiesController } from './city.controller'; // Asumiendo que el controlador se llama cities.controller.ts
-import { Province } from '../entities/province.entity'; // CityService necesita ProvinceRepository
+import { CitiesService } from './city.service';
+import { CitiesController } from './city.controller';
+import { Province } from '../entities/province.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([City, Province]), // Registra City y Province para este módulo
+    TypeOrmModule.forFeature([City, Province]),
   ],
   controllers: [CitiesController],
   providers: [CitiesService],
-  exports: [CitiesService], // Exporta el servicio si otros módulos lo necesitan
+  exports: [CitiesService],
 })
-export class CitiesModule {}
+export class CitiesModule { }

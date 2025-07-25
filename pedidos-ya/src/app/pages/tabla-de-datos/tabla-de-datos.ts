@@ -37,7 +37,6 @@ export class TablaDeDatos implements OnInit {
       return;
     }
 
-    // Pedimos confirmación al usuario
     if (confirm(`¿Está seguro de que desea eliminar ${this.selectedIds.size} persona(s)?`)) {
       const idsToDelete = Array.from(this.selectedIds);
 

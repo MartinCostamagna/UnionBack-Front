@@ -7,7 +7,7 @@ export class CreateCountryDto {
   @MaxLength(100, { message: 'El nombre del país no debe exceder los 100 caracteres.' })
   name!: string;
 
-  @IsOptional() // El código de país puede ser opcional
+  @IsOptional()
   @IsString({ message: 'El código del país debe ser una cadena de texto.' })
   @MaxLength(10, { message: 'El código del país no debe exceder los 10 caracteres.' })
   code?: string;

@@ -1,14 +1,14 @@
 // src/georef/interfaces/georef.interfaces.ts
 
 export interface GeorefCentroide {
-  lat: number; // Latitud
-  lon: number; // Longitud
+  lat: number;
+  lon: number;
 }
 
 export interface GeorefProvincia {
-  id: string;                 // ID de la provincia según Georef
-  nombre: string;             // Nombre de la provincia
-  centroide: GeorefCentroide; // Coordenadas del centroide de la provincia
+  id: string;
+  nombre: string;
+  centroide: GeorefCentroide;
 }
 
 export interface GeorefProvinciasResponse {
@@ -20,13 +20,13 @@ export interface GeorefProvinciasResponse {
 }
 
 export interface GeorefMunicipio {
-  id: string;                 // ID del municipio según Georef
-  nombre: string;             // Nombre del municipio
+  id: string;
+  nombre: string;
   provincia: {
-    id: string;               // ID de la provincia (de Georef) a la que pertenece el municipio
-    nombre: string;           // Nombre de la provincia
+    id: string;
+    nombre: string;
   };
-  centroide: GeorefCentroide; // Coordenadas del centroide del municipio
+  centroide: GeorefCentroide;
 }
 
 export interface GeorefMunicipiosResponse {

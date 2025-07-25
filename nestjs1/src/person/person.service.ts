@@ -11,11 +11,7 @@ import { PaginationDto } from '../dto/pagination.dto';
 import { PaginatedResponseDto } from '../dto/paginated-response.dto';
 import { PersonResponseDto, CityResponse, ProvinceResponse, CountryResponse } from '../interfaces/person.interfaces';
 
-/**
- * Función de ayuda para corregir la zona horaria de una fecha.
- * @param dateString - El string de fecha en formato 'YYYY-MM-DD'.
- * @returns Un objeto Date ajustado para evitar el desfase de zona horaria.
- */
+
 function adjustDateForTimezone(dateString: string | Date): Date | null {
   if (!dateString) return null;
   // Si ya es un objeto Date, no hacemos nada. Si es string, lo ajustamos.

@@ -2,22 +2,22 @@
 import { Controller, Post, Body, UseGuards, HttpCode, HttpStatus, Logger, UnauthorizedException } from '@nestjs/common';
 import { DataSeedingService } from './data-seeding.service';
 import { TriggerSeedingDto } from '../../dto/trigger-seeding.dto';
-import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard'; // Ajusta la ruta si es necesario
-import { RolesGuard } from '../../auth/guards/roles.guard';     // Ajusta la ruta si es necesario
-import { Roles } from '../../auth/decorators/roles.decorator';   // Ajusta la ruta si es necesario
-import { PersonRole } from '../../entities/person.entity'; // Ajusta la ruta si es necesario
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../../auth/guards/roles.guard';
+import { Roles } from '../../auth/decorators/roles.decorator';
+import { PersonRole } from '../../entities/person.entity';
 import { ConfigService } from '@nestjs/config';
 
-@Controller('seed') // Ruta base para operaciones de siembra
-@UseGuards(JwtAuthGuard, RolesGuard) // Protege todos los endpoints de este controlador con JWT y Roles
-@Roles(PersonRole.ADMIN) // Solo usuarios con rol ADMIN pueden acceder a este controlador
+@Controller('seed')
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(PersonRole.ADMIN)
 export class DataSeedingController {
   private readonly logger = new Logger(DataSeedingController.name);
 
   constructor(
     private readonly dataSeedingService: DataSeedingService,
-    private readonly configService: ConfigService, // Para acceder a la contraseña del .env
-  ) {}
+    private readonly configService: ConfigService,
+  ) { }
 
   @Post('trigger')
   @HttpCode(HttpStatus.OK)
@@ -31,10 +31,6 @@ export class DataSeedingController {
       throw new UnauthorizedException('Configuración de seguridad de siembra incompleta. Contacte al administrador.');
     }
 
-    // Compara la contraseña ingresada con la del .env
-    // NOTA: Para una seguridad aún mayor, la contraseña en .env DEBERÍA estar hasheada
-    // y se usaría bcrypt.compare() aquí, pero para una "contraseña especial" (secreto)
-    // que no es una contraseña de usuario, una comparación directa puede ser aceptable si el .env es seguro.
     if (triggerSeedingDto.adminPassword !== seedingSecret) {
       this.logger.warn('Intento fallido de siembra manual: Contraseña especial incorrecta.');
       throw new UnauthorizedException('Contraseña especial de administrador incorrecta.');
@@ -42,12 +38,11 @@ export class DataSeedingController {
 
     this.logger.log('Contraseña especial correcta. Disparando la siembra manual de la base de datos.');
     try {
-      await this.dataSeedingService.seedDatabase(); // Llama al método de siembra existente
+      await this.dataSeedingService.seedDatabase();
       this.logger.log('Siembra manual de datos completada con éxito.');
       return { message: 'La siembra manual de datos ha sido disparada y completada con éxito.' };
     } catch (error: any) {
       this.logger.error(`Error durante la siembra manual: ${error.message}`, error.stack);
-      // Puedes lanzar una excepción más específica si quieres.
       throw new Error(`Error al ejecutar la siembra manual: ${error.message}`);
     }
   }

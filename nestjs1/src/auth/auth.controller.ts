@@ -22,8 +22,6 @@ export class AuthController {
   @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true, transform: true }))
   async register(@Body() registerPersonDto: RegisterPersonDto) {
     this.logger.log(`Intento de registro para el email: ${registerPersonDto.email}`);
-    // El servicio de registro ahora devuelve { message, userId }
-    // Podría devolver un token si se implementa login automático.
     const result = await this.authService.register(registerPersonDto);
     return result;
   }
@@ -94,7 +92,6 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Get('profile')
   getProfile(@User() user: any) {
-    // Ahora la variable 'user' contiene directamente lo que antes era 'req.user'
     return user;
   }
 }

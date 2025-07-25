@@ -6,12 +6,12 @@ import { GeorefService } from './georef.service';
 @Module({
   imports: [
     HttpModule.register({
-      baseURL: 'https://apis.datos.gob.ar/georef/api', // URL base de la API Georef
-      timeout: 15000, // Timeout aumentado para respuestas potencialmente grandes
+      baseURL: 'https://apis.datos.gob.ar/georef/api',
+      timeout: 15000,
       headers: { 'Accept': 'application/json' },
     }),
   ],
-  providers: [GeorefService, Logger], // GeorefService usa Logger
-  exports: [GeorefService], // Exportar GeorefService para que DataSeedingModule pueda usarlo
+  providers: [GeorefService, Logger],
+  exports: [GeorefService],
 })
-export class GeorefModule {}
+export class GeorefModule { }

@@ -4,7 +4,6 @@ import { Province } from '../entities/province.entity';
 import { Person } from '../entities/person.entity';
 
 @Entity('cities')
-// Latitud y longitud como identificador único para la ciudad.
 @Unique(['latitude', 'longitude'])
 export class City {
   @PrimaryGeneratedColumn()

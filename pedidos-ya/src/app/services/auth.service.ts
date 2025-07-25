@@ -59,7 +59,6 @@ export class AuthService {
         return !!this.getToken();
     }
 
-    // El resto de tus métodos (getUserRole, etc.) ya usan getToken(), por lo que funcionarán correctamente.
     getUserRole(): string | null {
         const token = this.getToken();
         if (!token) { return null; }

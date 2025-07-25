@@ -5,7 +5,7 @@ export interface ProvinceResponseDto {
   name: string;
   latitude: number;
   longitude: number;
-  country: { // Simplificación de la relación Country
+  country: {
     id: number;
     name: string;
   };

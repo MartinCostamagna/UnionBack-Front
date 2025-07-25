@@ -1,5 +1,4 @@
 // src/common/dto/paginated-response.dto.ts
-// Define la estructura del objeto 'meta' para la paginación como una interfaz
 export interface PaginationMetaDto {
   totalItems: number;
   itemCount: number;

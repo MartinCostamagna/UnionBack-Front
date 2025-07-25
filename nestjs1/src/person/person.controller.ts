@@ -13,8 +13,8 @@ import { Roles } from '../auth/decorators/roles.decorator';
 import { PersonRole } from '../entities/person.entity';
 import { PersonResponseDto } from '../interfaces/person.interfaces';
 
-import { PaginationDto } from '../dto/pagination.dto'; // NUEVO
-import { PaginatedResponseDto } from '../dto/paginated-response.dto'; // NUEVO
+import { PaginationDto } from '../dto/pagination.dto';
+import { PaginatedResponseDto } from '../dto/paginated-response.dto';
 
 @Controller('persons')
 @UseGuards(JwtAuthGuard)
@@ -35,24 +35,24 @@ export class PersonController {
   @Get()
   @UseGuards(RolesGuard)
   @Roles(PersonRole.ADMIN, PersonRole.MODERATOR)
-  findAll(@Query() paginationDto: PaginationDto): Promise<PaginatedResponseDto<PersonResponseDto>> { // MODIFICADO
+  findAll(@Query() paginationDto: PaginationDto): Promise<PaginatedResponseDto<PersonResponseDto>> {
     this.logger.log(`Buscando todas las personas con paginación: ${JSON.stringify(paginationDto)}`);
-    return this.personService.findAll(paginationDto); // MODIFICADO
+    return this.personService.findAll(paginationDto);
   }
 
   @Get('search')
   @UseGuards(RolesGuard)
   @Roles(PersonRole.ADMIN, PersonRole.MODERATOR)
-  async searchByName( // MODIFICADO (se añadió async)
+  async searchByName(
     @Query() paginationDto: PaginationDto // NUEVO: ahora todos los params de búsqueda van en paginationDto
-  ): Promise<PaginatedResponseDto<PersonResponseDto>> { // MODIFICADO
+  ): Promise<PaginatedResponseDto<PersonResponseDto>> {
     const name = paginationDto.name; // Obtiene 'name' del DTO de paginación
     this.logger.log(`Buscando personas por nombre: ${name} con paginación: ${JSON.stringify(paginationDto)}`);
     if (!name || name.trim() === '') {
       // Si el término de búsqueda está vacío, devuelve una respuesta paginada vacía
       throw new BadRequestException('El término de búsqueda "name" no puede estar vacío para esta operación.');
     }
-    return this.personService.findByName(name, paginationDto); // MODIFICADO
+    return this.personService.findByName(name, paginationDto);
   }
 
   @Get(':id')

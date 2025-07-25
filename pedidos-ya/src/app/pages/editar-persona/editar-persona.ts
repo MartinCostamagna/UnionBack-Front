@@ -97,9 +97,8 @@ export class EditarPersonaComponent implements OnInit {
           });
         }
 
-        // Hacemos las 3 llamadas en paralelo
         return forkJoin({
-          person: of(person), // Pasamos la persona a la siguiente etapa
+          person: of(person),
           countries: this.countriesService.getCountries(),
           provinces: this.provincesService.getProvincesByCountry(countryId),
           cities: this.citiesService.getCitiesByProvince(provinceId)
